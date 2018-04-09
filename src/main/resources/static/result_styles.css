@@ -1,24 +1,26 @@
 html {
     height: 100%;
     overflow-y: scroll;
-    width: 100%;}
+    width: 100%;
+}
 
 body {
     font-family: 'Lato', sans-serif;
     padding-top: 1%;
     padding-bottom: 1%;
     background-size: cover;
-    background-position: center;
+    background: url("images/back.jpg") fixed center;
 }
 
 .jumbotron {
-    background: rgba(227, 232, 234, 0.6);
+    background: rgba(227, 232, 234, 0.5);
     min-height: 500px;
     height: auto;
     width: 82%;
     margin: 0 auto;
     margin-bottom: 0;
-    padding-bottom: 1%; }
+    padding-bottom: 1%;
+}
 
 table thead tr {
     text-align: center;

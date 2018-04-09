@@ -1,70 +1,112 @@
 html {
-  height: 100%;
-  overflow-y: scroll;
-  width: 100%;}
+    height: 100%;
+    overflow-y: scroll;
+    width: 100%;
+}
 
 body {
-  font-family: 'Lato', sans-serif;
-  padding-top: 1%;
-  padding-bottom: 1%;
-  background-size: cover;
-  background: url("images/back.jpg") center;
+    font-family: 'Lato', sans-serif;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    background-size: cover;
+    background: url("images/back.jpg") fixed center;
 }
 
 h1 {
-  font-size: 35px; }
+    font-size: 35px;
+    padding-left: 4%;
+}
 
 .jumbotron {
-  background: rgba(227, 232, 234, 0.6);
-  min-height: 500px;
-  height: auto;
-  width: 82%;
-  margin: 0 auto;
-  margin-bottom: 0;
-  padding-bottom: 1%; }
+    background: rgba(227, 232, 234, 0.8);
+    min-height: 500px;
+    height: auto;
+    width: 82%;
+    margin: 0 auto;
+    margin-top: 5%;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 1%;
+    padding-top: 2%;
+}
+
+hr {
+    margin-top: 0;
+}
 
 #descr {
-  width: 100%; }
+    width: 100%;
+}
 
 input[type="time"].form-control, input[type="date"].form-control {
-  width: 22.5%; }
+    width: 22.5%;
+}
 
 .form-inline .form-control {
-  width: 15%; }
+    width: 15%;
+    margin-right: 4px;
+}
+
+form > label {
+    padding-left: 4%;
+}
+
+form > .form-group {
+    padding-left: 4%;
+    padding-right: 4%;
+}
 
 .form-control {
-  width: 45%; }
+    width: 45%;
+}
 
 .content {
-  font-size: 22px; }
+    font-size: 22px;
+}
 
 #toggleTransport, #toggleSleep, #toggleLocal, #toggleSpends {
-  display: none; }
+    display: none;
+}
 
 .slidersStyle {
-  font-size: 18px; }
-  .slidersStyle ul {
-    font-size: 16px; }
-    .slidersStyle ul li ul li {
-      font-size: 14px; }
+    font-size: 18px;
+    background: rgba(114, 115, 117, 0.5);
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-left: 4%;
+    padding-right: 4%;
+}
+
+.slidersStyle ul {
+    font-size: 16px;
+}
+
+.slidersStyle ul li ul li {
+    font-size: 14px;
+}
 
 input[type='submit'] {
-  width: 30%; }
+    width: 30%;
+}
 
 ul.submitButton {
-  text-align: center;
-  padding-left: 0; }
+    text-align: center;
+    padding-left: 0;
+}
 
 .removeCost {
-  opacity: 0;
-  transition: 0.2s linear;
-  width: 0px;
-  background-color: #e74c63;
-  color: white;
-  font-size: 15px;
-  display: inline-block;
-  text-align: center; }
+    opacity: 0;
+    transition: 0.2s linear;
+    width: 0px;
+    background-color: #e74c63;
+    color: white;
+    font-size: 15px;
+    display: inline-block;
+    text-align: center;
+}
 
 .rem:hover span.removeCost {
-  opacity: 1;
-  width: 40px; }
+    opacity: 1;
+    width: 40px;
+}
