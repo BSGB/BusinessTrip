@@ -7,12 +7,9 @@ body {
   font-family: 'Lato', sans-serif;
   padding-top: 1%;
   padding-bottom: 1%;
-  background-color: white;
   background-size: cover;
-  background-position: center;
-  background: #FEAC5E;
-  background: -webkit-linear-gradient(to right, #4BC0C8, #C779D0, #FEAC5E);
-  background: linear-gradient(to right, #4BC0C8, #C779D0, #FEAC5E); }
+  background: url("images/back.jpg") center;
+}
 
 h1 {
   font-size: 35px; }
@@ -71,5 +68,3 @@ ul.submitButton {
 .rem:hover span.removeCost {
   opacity: 1;
   width: 40px; }
-
-/*# sourceMappingURL=calculator_styles.css.map */

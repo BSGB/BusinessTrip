@@ -8,7 +8,7 @@
     <link href="vendors/css/bootstrap.min.css" rel="stylesheet">
     <script src="vendors/fontawesome/fontawesome-all.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet">
-    <link rel="stylesheet" href="result_styles.css">
+    <!--<link rel="stylesheet" href="result_styles.css">-->
 </head>
 <body>
 <div class="container">
@@ -21,6 +21,10 @@
             </thead>
             <tbody>
             <tr>
+                <td>Opis</td>
+                <td><p id="descript" th:text="${dscrp}"/></td>
+            </tr>
+            <tr>
                 <td>Data i godzina wyjazdu</td>
                 <td><p id="leaveTime" th:text="${leave}"/></td>
             </tr>
@@ -31,6 +35,102 @@
             <tr>
                 <td>Całkowity czas podrózy</td>
                 <td><p id="totalTime" th:text="${total}"/></td>
+            </tr>
+            <tr>
+                <td>Wysokość diet</td>
+                <td><p id="dietCost" th:text="${diet}"/></td>
+            </tr>
+            <tr>
+                <td>Ilość śniadań</td>
+                <td><p id="breakfastAmount" th:text="${breakfast}"/></td>
+            </tr>
+            <tr>
+                <td>Ilość obiadów</td>
+                <td><p id="dinnerAmount" th:text="${dinner}"/></td>
+            </tr>
+            <tr>
+                <td>Ilość kolacji</td>
+                <td><p id="supperAmount" th:text="${supper}"/></td>
+            </tr>
+            <tr>
+                <td>Łączna kwota zmniejszająca diety z tytułu zapewnionego bezpłatnego wyżywienia</td>
+                <td><p id="freeFoodCost" th:text="${freeFood}"/></td>
+            </tr>
+            <tr>
+                <td>Łączna wysokość diet</td>
+                <td><p id="dietValue" th:text="${totalDiet}"/></td>
+            </tr>
+            <tr>
+                <td>Rodzaj środka transportu</td>
+                <td><p id="transType" th:text="${trnsprtType}"/></td>
+            </tr>
+            <tr>
+                <td>Koszty przejazdów według ceny biletu</td>
+                <td><p id="ticketPrice" th:text="${tcktPrice}"/></td>
+            </tr>
+            <tr>
+                <td>Przejazd samochodem osobowym (do 900 cm3)</td>
+                <td><p id="unCcm" th:text="${underCcm}"/></td>
+            </tr>
+            <tr>
+                <td>Przejazd samochodem osobowym (pow 900 cm3)</td>
+                <td><p id="ovCcm" th:text="${overCcm}"/></td>
+            </tr>
+            <tr>
+                <td>Przejazd motocyklem</td>
+                <td><p id="motorcycle" th:text="${motoCycle}"/></td>
+            </tr>
+            <tr>
+                <td>Przejazd motorowerem</td>
+                <td><p id="motBicycle" th:text="${motoBicycle}"/></td>
+            </tr>
+            <tr>
+                <td>Koszty przejazdów rozliczanych kilometrówką</td>
+                <td><p id="trvlCost" th:text="${travelCost}"/></td>
+            </tr>
+            <tr>
+                <td>Liczba noclegów za które przysługuje ryczałt</td>
+                <td><p id="lumpSum" th:text="${lmpSum}"/></td>
+            </tr>
+            <tr>
+                <td>Przysługujący ryczałt</td>
+                <td><p id="lump" th:text="${lmp}"/></td>
+            </tr>
+            <tr>
+                <td>Koszt noclegów stwierdzony rachunkiem</td>
+                <td><p id="sleepBill" th:text="${billSleep}"/></td>
+            </tr>
+            <tr>
+                <td>Ilość dób, za które przysługuje ryczałt za dojazdy</td>
+                <td><p id="pLumpSum" th:text="${pLmpSum}"/></td>
+            </tr>
+            <tr>
+                <td>Ryczałt za dojazdy</td>
+                <td><p id="pLump" th:text="${pLmp}"/></td>
+            </tr>
+            <tr>
+                <td>Udokumentowane koszty dojazdu</td>
+                <td><p id="returnPay" th:text="${rtrnPay}"/></td>
+            </tr>
+
+            <th:block th:each="cost, cIndex : ${calculateTrip.costs}">
+                <tr>
+                    <td th:text="${cost}"></td>
+                    <td th:text="${calculateTrip.amounts[__${cIndex .index}__]}"></td>
+                </tr>
+            </th:block>
+
+            <tr>
+                <td>Suma kosztów</td>
+                <td><p id="sumCosts" th:text="${costs}"/></td>
+            </tr>
+            <tr>
+                <td>Pobrana zaliczka</td>
+                <td><p id="advance" th:text="${advnc}"/></td>
+            </tr>
+            <tr>
+                <td>Do wypłaty</td>
+                <td><p id="payment" th:text="${paymnt}"/></td>
             </tr>
             </tbody>
         </table>

@@ -13,6 +13,25 @@ public class Trip {
     private String descr;
     private String leaveDate;
     private String leaveTime;
+	private String arriveDate;
+    private String arriveTime;
+    private String pay;
+    private String breakfast;
+    private String dinner;
+    private String supper;
+    private String transType;
+    private String ticketPrice;
+    private String ovCcm;
+    private String unCcm;
+    private String motorcycle;
+    private String motBicycle;
+    private String lumpSum;
+    private String sleepBill;
+    private String pLumpSum;
+    private String returnPay;
+    private List<String> costs;
+    private List<String> amounts;
+    private String advance;
 
     public String getDescr() {
         return descr;
@@ -189,24 +208,4 @@ public class Trip {
     public void setAdvance(String advance) {
         this.advance = advance;
     }
-
-    private String arriveDate;
-    private String arriveTime;
-    private String pay;
-    private String breakfast;
-    private String dinner;
-    private String supper;
-    private String transType;
-    private String ticketPrice;
-    private String ovCcm;
-    private String unCcm;
-    private String motorcycle;
-    private String motBicycle;
-    private String lumpSum;
-    private String sleepBill;
-    private String pLumpSum;
-    private String returnPay;
-    private List<String> costs;
-    private List<String> amounts;
-    private String advance;
 }
