@@ -13,7 +13,7 @@ body {
 }
 
 .jumbotron {
-    background: rgba(227, 232, 234, 0.5);
+    background: rgba(227, 232, 234, 0.8);
     min-height: 500px;
     height: auto;
     width: 82%;
