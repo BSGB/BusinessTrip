@@ -25,3 +25,7 @@ body {
 table thead tr {
     text-align: center;
 }
+
+#gPdf {
+    text-align: right;
+}

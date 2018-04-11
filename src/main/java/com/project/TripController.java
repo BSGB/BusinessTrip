@@ -1,65 +1,79 @@
 package com.project;
 
+import com.itextpdf.text.DocumentException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
+import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by Bartosz on 06.04.2018.
  */
-@Controller
+@RestController
 public class TripController {
 
-    @GetMapping("/")
-    public String index() {
-        return "redirect:/calculator";
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public RedirectView redirectToIndex() {
+        return new RedirectView("/calculator");
+    }
+    @RequestMapping(value = "/calculator", method = RequestMethod.GET)
+    public ModelAndView index() {
+        return new ModelAndView("calculator");
     }
 
-    @GetMapping("/calculator")
-    public String calculatorGet(Model model) {
-        model.addAttribute("calculator", new Trip());
-        return "calculator";
-    }
-
-    @PostMapping("/calculator")
-    public String calculatorPost(@ModelAttribute Trip trip, Model model) throws ParseException {
+    @RequestMapping(value = "/calculator", method = RequestMethod.POST)
+    public RedirectView calculatorPost(@ModelAttribute Trip trip, RedirectAttributes redirectAttributes) throws ParseException {
         CalculateTrip calculateTrip = new CalculateTrip(trip);
-        model.addAttribute(calculateTrip);
-        Map<String, String> attributes = new HashMap<>();
-        attributes.put("dscrp", calculateTrip.getDescript());
-        attributes.put("leave", calculateTrip.getLeaveTime());
-        attributes.put("arrive", calculateTrip.getArriveTime());
-        attributes.put("total", calculateTrip.getTotalTime());
-        attributes.put("diet", calculateTrip.getDietCost().toString());
-        attributes.put("breakfast", calculateTrip.getBreakfastAmount());
-        attributes.put("dinner", calculateTrip.getDinnerAmount());
-        attributes.put("supper", calculateTrip.getSupperAmount());
-        attributes.put("freeFood", calculateTrip.getFreeFoodCost().toString());
-        attributes.put("totalDiet", calculateTrip.getDietValue().toString());
-        attributes.put("trnsprtType", calculateTrip.getTransType());
-        attributes.put("tcktPrice", calculateTrip.getTicketPrice().toString());
-        attributes.put("underCcm", calculateTrip.getUnCcm().toString());
-        attributes.put("overCcm", calculateTrip.getOvCcm().toString());
-        attributes.put("motoCycle", calculateTrip.getMotorcycle().toString());
-        attributes.put("motoBicycle", calculateTrip.getMotBicycle().toString());
-        attributes.put("travelCost", calculateTrip.getTrvlCost().toString());
-        attributes.put("lmpSum", calculateTrip.getLumpSum());
-        attributes.put("lmp", calculateTrip.getLump().toString());
-        attributes.put("billSleep", calculateTrip.getSleepBill().toString());
-        attributes.put("pLmpSum", calculateTrip.getPLumpSum());
-        attributes.put("pLmp", calculateTrip.getPLump().toString());
-        attributes.put("rtrnPay", calculateTrip.getReturnPay().toString());
-        attributes.put("costs", calculateTrip.getSumCosts().toString());
-        attributes.put("advnc", calculateTrip.getAdvance().toString());
-        attributes.put("paymnt", calculateTrip.getPayment().toString());
-        model.addAllAttributes(attributes);
-        return "result";
+        redirectAttributes.addFlashAttribute("costsList", trip.getCosts());
+        redirectAttributes.addFlashAttribute("amountsList", trip.getAmounts());
+        redirectAttributes.addFlashAttribute("dscrp", calculateTrip.getDescript());
+        redirectAttributes.addFlashAttribute("leave", calculateTrip.getLeaveTime());
+        redirectAttributes.addFlashAttribute("arrive", calculateTrip.getArriveTime());
+        redirectAttributes.addFlashAttribute("total", calculateTrip.getTotalTime());
+        redirectAttributes.addFlashAttribute("diet", calculateTrip.getDietCost().toString());
+        redirectAttributes.addFlashAttribute("breakfast", calculateTrip.getBreakfastAmount());
+        redirectAttributes.addFlashAttribute("dinner", calculateTrip.getDinnerAmount());
+        redirectAttributes.addFlashAttribute("supper", calculateTrip.getSupperAmount());
+        redirectAttributes.addFlashAttribute("freeFood", calculateTrip.getFreeFoodCost().toString());
+        redirectAttributes.addFlashAttribute("totalDiet", calculateTrip.getDietValue().toString());
+        redirectAttributes.addFlashAttribute("trnsprtType", calculateTrip.getTransType());
+        redirectAttributes.addFlashAttribute("tcktPrice", calculateTrip.getTicketPrice().toString());
+        redirectAttributes.addFlashAttribute("underCcm", calculateTrip.getUnCcm().toString());
+        redirectAttributes.addFlashAttribute("overCcm", calculateTrip.getOvCcm().toString());
+        redirectAttributes.addFlashAttribute("motoCycle", calculateTrip.getMotorcycle().toString());
+        redirectAttributes.addFlashAttribute("motoBicycle", calculateTrip.getMotBicycle().toString());
+        redirectAttributes.addFlashAttribute("travelCost", calculateTrip.getTrvlCost().toString());
+        redirectAttributes.addFlashAttribute("lmpSum", calculateTrip.getLumpSum());
+        redirectAttributes.addFlashAttribute("lmp", calculateTrip.getLump().toString());
+        redirectAttributes.addFlashAttribute("billSleep", calculateTrip.getSleepBill().toString());
+        redirectAttributes.addFlashAttribute("pLmpSum", calculateTrip.getPLumpSum());
+        redirectAttributes.addFlashAttribute("pLmp", calculateTrip.getPLump().toString());
+        redirectAttributes.addFlashAttribute("rtrnPay", calculateTrip.getReturnPay().toString());
+        redirectAttributes.addFlashAttribute("costs", calculateTrip.getSumCosts().toString());
+        redirectAttributes.addFlashAttribute("advnc", calculateTrip.getAdvance().toString());
+        redirectAttributes.addFlashAttribute("paymnt", calculateTrip.getPayment().toString());
+
+        return new RedirectView("/calculator/result");
     }
 
+    @RequestMapping(value = "/calculator/result", method = RequestMethod.GET)
+    public ModelAndView displayResults(@RequestParam(value = "report_id", required = false) String reportId, HttpServletRequest request, Model model) {
+//        Map<String, ?> arguments = RequestContextUtils.getInputFlashMap(request);
+        System.out.println("X: " + reportId);
+        return new ModelAndView("result");
+    }
 }

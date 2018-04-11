@@ -1,9 +1,12 @@
 package com.project;
 
+import com.itextpdf.text.Document;
 import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.*;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +45,7 @@ public class CalculateTrip {
     private List<String> amounts;
     private List<Double> dbAmounts;
     private Double otherExpensesSum;
+
 
     private Trip trip;
     public CalculateTrip(Trip trip) throws ParseException {
