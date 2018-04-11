@@ -14,6 +14,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -36,44 +37,55 @@ public class TripController {
     }
 
     @RequestMapping(value = "/calculator", method = RequestMethod.POST)
-    public RedirectView calculatorPost(@ModelAttribute Trip trip, RedirectAttributes redirectAttributes) throws ParseException {
+    public RedirectView calculatorPost(@ModelAttribute("Trip") Trip trip, HttpSession httpSession) throws ParseException {
         CalculateTrip calculateTrip = new CalculateTrip(trip);
-        redirectAttributes.addFlashAttribute("costsList", trip.getCosts());
-        redirectAttributes.addFlashAttribute("amountsList", trip.getAmounts());
-        redirectAttributes.addFlashAttribute("dscrp", calculateTrip.getDescript());
-        redirectAttributes.addFlashAttribute("leave", calculateTrip.getLeaveTime());
-        redirectAttributes.addFlashAttribute("arrive", calculateTrip.getArriveTime());
-        redirectAttributes.addFlashAttribute("total", calculateTrip.getTotalTime());
-        redirectAttributes.addFlashAttribute("diet", calculateTrip.getDietCost().toString());
-        redirectAttributes.addFlashAttribute("breakfast", calculateTrip.getBreakfastAmount());
-        redirectAttributes.addFlashAttribute("dinner", calculateTrip.getDinnerAmount());
-        redirectAttributes.addFlashAttribute("supper", calculateTrip.getSupperAmount());
-        redirectAttributes.addFlashAttribute("freeFood", calculateTrip.getFreeFoodCost().toString());
-        redirectAttributes.addFlashAttribute("totalDiet", calculateTrip.getDietValue().toString());
-        redirectAttributes.addFlashAttribute("trnsprtType", calculateTrip.getTransType());
-        redirectAttributes.addFlashAttribute("tcktPrice", calculateTrip.getTicketPrice().toString());
-        redirectAttributes.addFlashAttribute("underCcm", calculateTrip.getUnCcm().toString());
-        redirectAttributes.addFlashAttribute("overCcm", calculateTrip.getOvCcm().toString());
-        redirectAttributes.addFlashAttribute("motoCycle", calculateTrip.getMotorcycle().toString());
-        redirectAttributes.addFlashAttribute("motoBicycle", calculateTrip.getMotBicycle().toString());
-        redirectAttributes.addFlashAttribute("travelCost", calculateTrip.getTrvlCost().toString());
-        redirectAttributes.addFlashAttribute("lmpSum", calculateTrip.getLumpSum());
-        redirectAttributes.addFlashAttribute("lmp", calculateTrip.getLump().toString());
-        redirectAttributes.addFlashAttribute("billSleep", calculateTrip.getSleepBill().toString());
-        redirectAttributes.addFlashAttribute("pLmpSum", calculateTrip.getPLumpSum());
-        redirectAttributes.addFlashAttribute("pLmp", calculateTrip.getPLump().toString());
-        redirectAttributes.addFlashAttribute("rtrnPay", calculateTrip.getReturnPay().toString());
-        redirectAttributes.addFlashAttribute("costs", calculateTrip.getSumCosts().toString());
-        redirectAttributes.addFlashAttribute("advnc", calculateTrip.getAdvance().toString());
-        redirectAttributes.addFlashAttribute("paymnt", calculateTrip.getPayment().toString());
+        HashMap<String, List> formLists = new HashMap<>();
+        HashMap<String, String> formValues = new HashMap<>();
+        formLists.put("costsList", trip.getCosts());
+        formLists.put("amountsList", trip.getAmounts());
+        formValues.put("dscrp", calculateTrip.getDescript());
+        formValues.put("leave", calculateTrip.getLeaveTime());
+        formValues.put("arrive", calculateTrip.getArriveTime());
+        formValues.put("total", calculateTrip.getTotalTime());
+        formValues.put("diet", calculateTrip.getDietCost().toString());
+        formValues.put("breakfast", calculateTrip.getBreakfastAmount());
+        formValues.put("dinner", calculateTrip.getDinnerAmount());
+        formValues.put("supper", calculateTrip.getSupperAmount());
+        formValues.put("freeFood", calculateTrip.getFreeFoodCost().toString());
+        formValues.put("totalDiet", calculateTrip.getDietValue().toString());
+        formValues.put("trnsprtType", calculateTrip.getTransType());
+        formValues.put("tcktPrice", calculateTrip.getTicketPrice().toString());
+        formValues.put("underCcm", calculateTrip.getUnCcm().toString());
+        formValues.put("overCcm", calculateTrip.getOvCcm().toString());
+        formValues.put("motoCycle", calculateTrip.getMotorcycle().toString());
+        formValues.put("motoBicycle", calculateTrip.getMotBicycle().toString());
+        formValues.put("travelCost", calculateTrip.getTrvlCost().toString());
+        formValues.put("lmpSum", calculateTrip.getLumpSum());
+        formValues.put("lmp", calculateTrip.getLump().toString());
+        formValues.put("billSleep", calculateTrip.getSleepBill().toString());
+        formValues.put("pLmpSum", calculateTrip.getPLumpSum());
+        formValues.put("pLmp", calculateTrip.getPLump().toString());
+        formValues.put("rtrnPay", calculateTrip.getReturnPay().toString());
+        formValues.put("costs", calculateTrip.getSumCosts().toString());
+        formValues.put("advnc", calculateTrip.getAdvance().toString());
+        formValues.put("paymnt", calculateTrip.getPayment().toString());
 
+        httpSession.setAttribute("Trip", formLists);
+        httpSession.setAttribute("CalculateTrip", formValues);
         return new RedirectView("/calculator/result");
     }
 
     @RequestMapping(value = "/calculator/result", method = RequestMethod.GET)
-    public ModelAndView displayResults(@RequestParam(value = "report_id", required = false) String reportId, HttpServletRequest request, Model model) {
+    public ModelAndView displayResults(@RequestParam(value = "report_id", required = false) String reportId, Model model, HttpSession session) {
 //        Map<String, ?> arguments = RequestContextUtils.getInputFlashMap(request);
-        System.out.println("X: " + reportId);
-        return new ModelAndView("result");
+        model.addAllAttributes((Map)session.getAttribute("Trip"));
+        model.addAllAttributes((Map)session.getAttribute("CalculateTrip"));
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("result");
+        if(reportId != null) {
+            //generatePDF
+            modelAndView = new ModelAndView(new RedirectView("/calculator/result"));
+        }
+        return modelAndView;
     }
 }
