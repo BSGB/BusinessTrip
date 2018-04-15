@@ -1,21 +1,16 @@
 package com.project;
 
 import com.itextpdf.text.DocumentException;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
-import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.io.*;
+import java.net.URLConnection;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -72,20 +67,42 @@ public class TripController {
 
         httpSession.setAttribute("Trip", formLists);
         httpSession.setAttribute("CalculateTrip", formValues);
+        httpSession.setAttribute("TripObject", trip);
+        httpSession.setAttribute("CalculateObject", calculateTrip);
         return new RedirectView("/calculator/result");
     }
 
     @RequestMapping(value = "/calculator/result", method = RequestMethod.GET)
-    public ModelAndView displayResults(@RequestParam(value = "report_id", required = false) String reportId, Model model, HttpSession session) {
+    public ModelAndView displayResults(@RequestParam(value = "report_id", required = false) String reportId, Model model, HttpSession session, HttpServletResponse response) throws IOException, DocumentException {
 //        Map<String, ?> arguments = RequestContextUtils.getInputFlashMap(request);
         model.addAllAttributes((Map)session.getAttribute("Trip"));
         model.addAllAttributes((Map)session.getAttribute("CalculateTrip"));
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("result");
-        if(reportId != null) {
-            //generatePDF
-            modelAndView = new ModelAndView(new RedirectView("/calculator/result"));
-        }
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/calculator/result/{command}", method = RequestMethod.GET)
+    public void getFile(@PathVariable("command") String command, Model model, HttpSession session, HttpServletResponse response) throws IOException, DocumentException {
+
+            TripPersist tripPersist = new TripPersist(
+                    (CalculateTrip)session.getAttribute("CalculateObject"),
+                    (Trip)session.getAttribute("TripObject"));
+
+            FileSupporter fileSupporter = new FileSupporter(tripPersist.getAdditionalMap(), tripPersist.getGeneralMap());
+            fileSupporter.prepareDocument();
+            fileSupporter.generatePdf();
+
+            File file = new File(fileSupporter.getFileName() + ".pdf");
+            InputStream in = new FileInputStream(file);
+
+            response.setContentType(URLConnection.guessContentTypeFromName(file.getName()));
+            response.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
+            response.setHeader("Content-Length", String.valueOf(file.length()));
+            OutputStream os = response.getOutputStream();
+            FileCopyUtils.copy(in, os);
+            in.close();
+            os.close();
     }
 }
