@@ -87,15 +87,7 @@
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.9.9</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.pdfcrowd/pdfcrowd -->
-		<dependency>
-			<groupId>com.pdfcrowd</groupId>
-			<artifactId>pdfcrowd</artifactId>
-			<version>4.3.0</version>
-		</dependency>
-
+			</dependency>
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>

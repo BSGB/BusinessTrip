@@ -3,12 +3,14 @@ package com.project;
 import com.itextpdf.text.DocumentException;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.*;
 import java.net.URLConnection;
 import java.text.ParseException;
@@ -26,13 +28,17 @@ public class TripController {
     public RedirectView redirectToIndex() {
         return new RedirectView("/calculator");
     }
+    
     @RequestMapping(value = "/calculator", method = RequestMethod.GET)
     public ModelAndView index() {
         return new ModelAndView("calculator");
     }
 
     @RequestMapping(value = "/calculator", method = RequestMethod.POST)
-    public RedirectView calculatorPost(@ModelAttribute("Trip") Trip trip, HttpSession httpSession) throws ParseException {
+    public RedirectView calculatorPost(@ModelAttribute("Trip") @Valid Trip trip, BindingResult bindingResult, HttpSession httpSession) throws ParseException {
+        if (bindingResult.hasErrors()) {
+            return new RedirectView("/calculator");
+        }
         CalculateTrip calculateTrip = new CalculateTrip(trip);
         HashMap<String, List> formLists = new HashMap<>();
         HashMap<String, String> formValues = new HashMap<>();
@@ -43,11 +49,11 @@ public class TripController {
         formValues.put("arrive", calculateTrip.getArriveTime());
         formValues.put("total", calculateTrip.getTotalTime());
         formValues.put("diet", calculateTrip.getDietCost().toString());
-        formValues.put("breakfast", calculateTrip.getBreakfastAmount());
-        formValues.put("dinner", calculateTrip.getDinnerAmount());
-        formValues.put("supper", calculateTrip.getSupperAmount());
-        formValues.put("freeFood", calculateTrip.getFreeFoodCost().toString());
-        formValues.put("totalDiet", calculateTrip.getDietValue().toString());
+        formValues.put("breakfast", String.valueOf(calculateTrip.getBreakfastAmount()));
+        formValues.put("dinner", String.valueOf(calculateTrip.getDinnerAmount()));
+        formValues.put("supper", String.valueOf(calculateTrip.getSupperAmount()));
+        formValues.put("freeFood", String.valueOf(calculateTrip.getFreeFoodCost()));
+        formValues.put("totalDiet", String.valueOf(calculateTrip.getDietValue()));
         formValues.put("trnsprtType", calculateTrip.getTransType());
         formValues.put("tcktPrice", calculateTrip.getTicketPrice().toString());
         formValues.put("underCcm", calculateTrip.getUnCcm().toString());
@@ -55,10 +61,10 @@ public class TripController {
         formValues.put("motoCycle", calculateTrip.getMotorcycle().toString());
         formValues.put("motoBicycle", calculateTrip.getMotBicycle().toString());
         formValues.put("travelCost", calculateTrip.getTrvlCost().toString());
-        formValues.put("lmpSum", calculateTrip.getLumpSum());
+        formValues.put("lmpSum", String.valueOf(calculateTrip.getLumpSum()));
         formValues.put("lmp", calculateTrip.getLump().toString());
         formValues.put("billSleep", calculateTrip.getSleepBill().toString());
-        formValues.put("pLmpSum", calculateTrip.getPLumpSum());
+        formValues.put("pLmpSum", String.valueOf(calculateTrip.getPLumpSum()));
         formValues.put("pLmp", calculateTrip.getPLump().toString());
         formValues.put("rtrnPay", calculateTrip.getReturnPay().toString());
         formValues.put("costs", calculateTrip.getSumCosts().toString());

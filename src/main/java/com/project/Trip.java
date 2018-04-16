@@ -3,209 +3,61 @@ package com.project;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Bartosz on 06.04.2018.
  */
-
+@Getter@Setter
 public class Trip {
+
     private String descr;
+    @NotNull@NotEmpty
     private String leaveDate;
+    @NotNull@NotEmpty
     private String leaveTime;
+    @NotNull@NotEmpty
 	private String arriveDate;
+    @NotNull@NotEmpty
     private String arriveTime;
-    private String pay;
-    private String breakfast;
-    private String dinner;
-    private String supper;
+
+    private Double pay;
+
+    private Integer breakfast;
+
+    private Integer dinner;
+
+    private Integer supper;
+
+    @NotNull
     private String transType;
-    private String ticketPrice;
-    private String ovCcm;
-    private String unCcm;
-    private String motorcycle;
-    private String motBicycle;
-    private String lumpSum;
-    private String sleepBill;
-    private String pLumpSum;
-    private String returnPay;
-    private List<String> costs;
-    private List<String> amounts;
-    private String advance;
 
-    public String getDescr() {
-        return descr;
-    }
+    private Double ticketPrice;
 
-    public void setDescr(String descr) {
-        this.descr = descr;
-    }
+    private Double ovCcm;
 
-    public String getLeaveDate() {
-        return leaveDate;
-    }
+    private Double unCcm;
 
-    public void setLeaveDate(String leaveDate) {
-        this.leaveDate = leaveDate;
-    }
+    private Double motorcycle;
 
-    public String getLeaveTime() {
-        return leaveTime;
-    }
+    private Double motBicycle;
 
-    public void setLeaveTime(String leaveTime) {
-        this.leaveTime = leaveTime;
-    }
+    private Double lumpSum;
 
-    public String getArriveDate() {
-        return arriveDate;
-    }
+    private Double sleepBill;
 
-    public void setArriveDate(String arriveDate) {
-        this.arriveDate = arriveDate;
-    }
+    private Double pLumpSum;
 
-    public String getArriveTime() {
-        return arriveTime;
-    }
+    private Double returnPay;
 
-    public void setArriveTime(String arriveTime) {
-        this.arriveTime = arriveTime;
-    }
+    private List<String> costs = new ArrayList<>();
+    private List<String> amounts = new ArrayList<>();
 
-    public String getPay() {
-        return pay;
-    }
+    private Double advance;
 
-    public void setPay(String pay) {
-        this.pay = pay;
-    }
 
-    public String getBreakfast() {
-        return breakfast;
-    }
-
-    public void setBreakfast(String breakfast) {
-        this.breakfast = breakfast;
-    }
-
-    public String getDinner() {
-        return dinner;
-    }
-
-    public void setDinner(String dinner) {
-        this.dinner = dinner;
-    }
-
-    public String getSupper() {
-        return supper;
-    }
-
-    public void setSupper(String supper) {
-        this.supper = supper;
-    }
-
-    public String getTransType() {
-        return transType;
-    }
-
-    public void setTransType(String transType) {
-        this.transType = transType;
-    }
-
-    public String getTicketPrice() {
-        return ticketPrice;
-    }
-
-    public void setTicketPrice(String ticketPrice) {
-        this.ticketPrice = ticketPrice;
-    }
-
-    public String getOvCcm() {
-        return ovCcm;
-    }
-
-    public void setOvCcm(String ovCcm) {
-        this.ovCcm = ovCcm;
-    }
-
-    public String getUnCcm() {
-        return unCcm;
-    }
-
-    public void setUnCcm(String unCcm) {
-        this.unCcm = unCcm;
-    }
-
-    public String getMotorcycle() {
-        return motorcycle;
-    }
-
-    public void setMotorcycle(String motorcycle) {
-        this.motorcycle = motorcycle;
-    }
-
-    public String getMotBicycle() {
-        return motBicycle;
-    }
-
-    public void setMotBicycle(String motBicycle) {
-        this.motBicycle = motBicycle;
-    }
-
-    public String getLumpSum() {
-        return lumpSum;
-    }
-
-    public void setLumpSum(String lumpSum) {
-        this.lumpSum = lumpSum;
-    }
-
-    public String getSleepBill() {
-        return sleepBill;
-    }
-
-    public void setSleepBill(String sleepBill) {
-        this.sleepBill = sleepBill;
-    }
-
-    public String getpLumpSum() {
-        return pLumpSum;
-    }
-
-    public void setpLumpSum(String pLumpSum) {
-        this.pLumpSum = pLumpSum;
-    }
-
-    public String getReturnPay() {
-        return returnPay;
-    }
-
-    public void setReturnPay(String returnPay) {
-        this.returnPay = returnPay;
-    }
-
-    public List<String> getCosts() {
-        return costs;
-    }
-
-    public void setCosts(List<String> costs) {
-        this.costs = costs;
-    }
-
-    public List<String> getAmounts() {
-        return amounts;
-    }
-
-    public void setAmounts(List<String> amounts) {
-        this.amounts = amounts;
-    }
-
-    public String getAdvance() {
-        return advance;
-    }
-
-    public void setAdvance(String advance) {
-        this.advance = advance;
-    }
 }

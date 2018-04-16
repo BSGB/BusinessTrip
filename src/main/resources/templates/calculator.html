@@ -9,6 +9,8 @@
     <script src="/vendors/fontawesome/fontawesome-all.js"></script>
     <link href="/https://fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet">
     <link rel="stylesheet" href="/calculator_styles.css">
+    <script type='text/javascript' src='/vendors/tipsy/javascripts/jquery.tipsy.js'></script>
+    <link rel="stylesheet" href="/vendors/tipsy/stylesheets/tipsy.css" type="text/css" />
 
 </head>
 
@@ -32,22 +34,22 @@
                         <div class="form-group">
                             <label>Data i godzina wyjazdu</label>
                             <div class="form-inline">
-                                <input name="leaveDate" type="date" id="leaveDate" class="form-control">
-                                <input name="leaveTime" type="time" id="leaveTime" class="form-control">
+                                <input name="leaveDate" type="date" id="leaveDate" class="form-control" value="2018-01-01">
+                                <input name="leaveTime" type="time" id="leaveTime" class="form-control" value="12:00">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label>Data i godzina przyjazdu</label>
                             <div class="form-inline">
-                                <input name="arriveDate" type="date" id="arriveDate" class="form-control">
-                                <input name="arriveTime" type="time" id="arriveTime" class="form-control">
+                                <input name="arriveDate" type="date" id="arriveDate" class="form-control" value="2018-01-01">
+                                <input name="arriveTime" type="time" id="arriveTime" class="form-control" value="12:00">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="pay">Wysokość diety za dobę podróży</label>
-                            <input name="pay" type="text" id="pay" class="form-control">
+                            <input name="pay" type="text" id="pay" class="form-control" value="30">
                         </div>
 
                         <div class="form-group">

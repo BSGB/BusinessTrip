@@ -27,10 +27,10 @@ public class TripPersist {
         generalMap.put("Data i godzina powrotu", calculateTrip.getArriveTime());
         generalMap.put("Calkowity czas podrozy", calculateTrip.getTotalTime());
         generalMap.put("Wysokosc diet", calculateTrip.getDietCost().toString());
-        generalMap.put("Ilosc sniadan", calculateTrip.getBreakfastAmount());
-        generalMap.put("Ilosc obiadow", calculateTrip.getDinnerAmount());
-        generalMap.put("Ilosc kolacji", calculateTrip.getSupperAmount());
-        generalMap.put("Kwota zmniejszajaca diety", calculateTrip.getFreeFoodCost().toString());
+        generalMap.put("Ilosc sniadan", String.valueOf(calculateTrip.getBreakfastAmount()));
+        generalMap.put("Ilosc obiadow", String.valueOf(calculateTrip.getDinnerAmount()));
+        generalMap.put("Ilosc kolacji", String.valueOf(calculateTrip.getSupperAmount()));
+        generalMap.put("Kwota zmniejszajaca diety", String.valueOf(calculateTrip.getFreeFoodCost()));
 //        generalMap.put("Loczna wysokosc diet", calculateTrip.getTotalDietCost().toString());
         generalMap.put("Rodzaj srodka transportu", calculateTrip.getTransType());
         generalMap.put("Koszty przejazdu wg biletu", calculateTrip.getTicketPrice().toString());
@@ -39,10 +39,10 @@ public class TripPersist {
         generalMap.put("Przejazd motocyklem", calculateTrip.getMotorcycle().toString());
         generalMap.put("Przejazd motorowerem", calculateTrip.getMotBicycle().toString());
         generalMap.put("Koszty rozliczane km", calculateTrip.getTrvlCost().toString());
-        generalMap.put("Liczba noclegow - ryczalt", calculateTrip.getLumpSum().toString());
+        generalMap.put("Liczba noclegow - ryczalt", String.valueOf(calculateTrip.getLumpSum()));
         generalMap.put("Przyslugujacy ryczalt", calculateTrip.getLump().toString());
         generalMap.put("Koszt noclegow", calculateTrip.getSleepBill().toString());
-        generalMap.put("Ilosc dob - ryczalt", calculateTrip.getPLumpSum().toString());
+        generalMap.put("Ilosc dob - ryczalt", String.valueOf(calculateTrip.getPLumpSum()));
         generalMap.put("Ryczalt za dojazdy", calculateTrip.getPLump().toString());
         generalMap.put("Koszty dojazdu", calculateTrip.getReturnPay().toString());
         generalMap.put("Suma kosztow", calculateTrip.getSumCosts().toString());
