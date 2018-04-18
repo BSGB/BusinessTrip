@@ -60,8 +60,8 @@ public class CalculateTrip {
         this.arriveTime = trip.getArriveTime();
         this.pay = trip.getPay() == null ? 30 : trip.getPay();
         this.breakfastAmount = trip.getBreakfast() == null ? 0 : trip.getBreakfast();
-        this.dinnerAmount = trip.getBreakfast() == null ? 0 : trip.getDinner();
-        this.supperAmount = trip.getBreakfast() == null ? 0 : trip.getSupper();
+        this.dinnerAmount = trip.getDinner() == null ? 0 : trip.getDinner();
+        this.supperAmount = trip.getSupper() == null ? 0 : trip.getSupper();
         this.transType = trip.getTransType();
         this.ticketPrice = trip.getTicketPrice() == null ? 0.0 : trip.getTicketPrice();
         this.ovCcm = trip.getOvCcm() == null ? 0.0 : trip.getOvCcm();

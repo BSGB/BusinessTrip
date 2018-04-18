@@ -38,8 +38,10 @@ public class FileSupporter {
         document.open();
         generateHeader();
         generateTable("Informacje ogolne", calculatedData, "string");
-        document.add(Chunk.NEXTPAGE);
-        generateTable("Koszty dodatkowe", tripData, "list");
+        if(!tripData.get("Costs").isEmpty()){
+            document.add(Chunk.NEXTPAGE);
+            generateTable("Koszty dodatkowe", tripData, "list");
+        }
         document.close();
     }
 
@@ -83,8 +85,8 @@ public class FileSupporter {
                 addRow(pdfPTable, (String)key, (String)value);
             });
         } else {
-            List<String> costs = tripData.get("Costs");
-            List<String> amounts = tripData.get("Amounts");
+            List<String> costs = (List)data.get("Costs");
+            List<String> amounts = (List)data.get("Amounts");
 
             Iterator<String> costsIter = costs.iterator();
             Iterator<String> amountsIter = amounts.iterator();

@@ -110,3 +110,12 @@ ul.submitButton {
     opacity: 1;
     width: 40px;
 }
+
+#error {
+    text-align: center;
+    color: #c82333;
+}
+
+label svg.fa-asterisk {
+    font-size: 0.6rem;
+}

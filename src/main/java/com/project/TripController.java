@@ -30,13 +30,18 @@ public class TripController {
     }
     
     @RequestMapping(value = "/calculator", method = RequestMethod.GET)
-    public ModelAndView index() {
+    public ModelAndView index(Model model, HttpSession httpSession) {
+        if(httpSession.getAttribute("error") != null) {
+            model.addAttribute("error", httpSession.getAttribute("error"));
+            httpSession.removeAttribute("error");
+        }
         return new ModelAndView("calculator");
     }
 
     @RequestMapping(value = "/calculator", method = RequestMethod.POST)
-    public RedirectView calculatorPost(@ModelAttribute("Trip") @Valid Trip trip, BindingResult bindingResult, HttpSession httpSession) throws ParseException {
+    public RedirectView calculatorPost(@ModelAttribute("Trip") @Valid Trip trip, BindingResult bindingResult, HttpSession httpSession, Model model) throws ParseException {
         if (bindingResult.hasErrors()) {
+            httpSession.setAttribute("error", "Wypełnij pola poprawnymi wartościami!");
             return new RedirectView("/calculator");
         }
         CalculateTrip calculateTrip = new CalculateTrip(trip);

@@ -97,30 +97,14 @@ $("#toggleSpends").on('click', '.removeCost', function () {
 //walidacja
 
 $("#pay").on("keyup", function(){
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 
-$("#leaveDate").change(function () {
-    if($(this).val() === ""){
-        $(this).addClass("is-invalid");
-        $(this).tipsy({fallback: "Data wyjazdu", gravity: "w", fade: true});
-    } else {
-        $(this).removeClass("is-invalid");
-        // $(this).addClass("is-valid");
-    }
+$("#leaveDate").change(function (){
+    validateDate();
 });
 $("#arriveDate").change(function(){
-    var leaveDate = $('#leaveDate');
-    var arriveDate = $('#arriveDate');
-    var lDate = new Date(leaveDate.val());
-    var aDate = new Date(arriveDate.val());
-    if(lDate > aDate || arriveDate.val() === ""){
-        $(this).addClass("is-invalid");
-        $(this).tipsy({fallback: "Data powrotu (nie moze byc mniejsza niz data wyjazdu)", gravity: "w", fade: true});
-    } else {
-        $(this).removeClass("is-invalid");
-        // $(this).addClass("is-valid");
-    }
+    validateDate();
 });
 
 $("#leaveTime").change(function () {
@@ -144,86 +128,116 @@ $("#arriveTime").change(function () {
 });
 
 $("#breakfast").on("keyup", function(){
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 $("#dinner").on("keyup", function(){
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 $("#supper").on("keyup", function(){
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 
 $("#transType").on("keyup", function(){
-    validateText($(this), "Wartosc tekstowa");
+    validateText($(this));
 });
 
 $("#ticketPrice").on("keyup", function(){
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 
 $("#ovCcm").on("keyup", function(){
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 
 $("#unCcm").on("keyup", function(){
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 
 $("#motorcycle").on("keyup", function(){
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 
 $("#motBicycle").on("keyup", function(){
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 
 $("#lumpSum").on("keyup", function(){
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 
 $("#sleepBill").on("keyup", function(){
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 
 $("#pLumpSum").on("keyup", function(){
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 
 $("#returnPay").on("keyup", function(){
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 
 $("#advance").on("keyup", function(){
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 
 $("form").on('keyup', 'input[name="costs"]', function () {
-    validateText($(this), "Wartosc tekstowa");
+    validateText($(this));
 });
 
 $("form").on('keyup', 'input[name="amounts"]', function () {
-    validateNumber($(this), "Wartosc liczbowa");
+    validateNumber($(this));
 });
 
 
 ////
 
-function validateNumber(e, message) {
+function validateNumber(e) {
     if(isNaN(e.val())){
         e.addClass("is-invalid");
-        e.tipsy({fallback: message, gravity: "w", fade: true});
+        e.tipsy({fallback: "Wartość liczbowa", gravity: "w", fade: true});
     } else {
         e.removeClass("is-invalid");
         // e.addClass("is-valid");
     }
 }
 
-function validateText(e, message) {
-    if(!isNaN(e.val())){
+function validateText(e) {
+    if(!isNaN(e.val()) && e.val() !== ""){
         e.addClass("is-invalid");
-        e.tipsy({fallback: message, gravity: "w", fade: true});
-    } else {
+        e.tipsy({fallback: "Wartość tekstowa", gravity: "w", fade: true});
+    } else if(isNaN(e.val()) || e.val() === ""){
+
         e.removeClass("is-invalid");
-        // e.addClass("is-valid");
+    }
+}
+
+function validateDate() {
+    var leaveDate = $('#leaveDate');
+    var arriveDate = $('#arriveDate');
+    var lDate = new Date(leaveDate.val());
+    var aDate = new Date(arriveDate.val());
+    if(lDate > aDate || arriveDate.val() === "" || leaveDate.val() === ""){
+        leaveDate.addClass("is-invalid");
+        arriveDate.addClass("is-invalid");
+        leaveDate.tipsy({fallback: "Data wyjazdu (nie może być większa niż data powrotu)", gravity: "w", fade: true});
+        arriveDate.tipsy({fallback: "Data powrotu (nie może być mniejsza niż data wyjazdu)", gravity: "w", fade: true});
+    } else {
+        leaveDate.removeClass("is-invalid");
+        arriveDate.removeClass("is-invalid");
+    }
+
+    function frontDateValid(){
+        var leaveDate = $('#leaveDate');
+        var arriveDate = $('#arriveDate');
+        var lDate = new Date(leaveDate.val());
+        var aDate = new Date(arriveDate.val());
+
+        console.log("HEJ");
+        if(lDate > aDate) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
