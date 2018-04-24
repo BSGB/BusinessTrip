@@ -15,3 +15,8 @@ body {
 .row {
     margin-top: 100px;
 }
+
+#error {
+    text-align: center;
+    color: #c82333;
+}

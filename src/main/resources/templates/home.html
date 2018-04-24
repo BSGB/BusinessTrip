@@ -28,22 +28,23 @@
                     <h3 class="card-title">Rejestracja</h3>
                 </div>
                 <div class="card-body">
-                    <form method="POST">
+                    <form method="POST" th:action="@{/home}">
+                        <p id="error" th:text="${error}"/>
                         <div class="form-group">
                             <label for="regLogin">Login</label>
-                            <input name="regLogin" id="regLogin" type="text" class="form-control">
+                            <input name="userLogin" id="regLogin" type="text" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="regPass">Hasło</label>
-                            <input name="regPass" id="regPass" type="password" class="form-control">
+                            <input name="userPassword" id="regPass" type="password" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="regComName">Nazwa firmy</label>
-                            <input name="regComName" id="regComName" type="text" class="form-control">
+                            <input name="companyName" id="regComName" type="text" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="regComNip">NIP firmy</label>
-                            <input name="regComNip" id="regComNip" type="text" class="form-control">
+                            <input name="companyNip" id="regComNip" type="text" class="form-control">
                         </div>
 
                         <ul class="text-center pl-0">
