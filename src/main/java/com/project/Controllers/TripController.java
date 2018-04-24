@@ -1,6 +1,10 @@
-package com.project;
+package com.project.Controllers;
 
 import com.itextpdf.text.DocumentException;
+import com.project.Misc.CalculateTrip;
+import com.project.Misc.FileSupporter;
+import com.project.Misc.TripPersist;
+import com.project.Models.Trip;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
@@ -23,14 +27,10 @@ import java.util.Map;
  */
 @RestController
 public class TripController {
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public RedirectView redirectToIndex() {
-        return new RedirectView("/calculator");
-    }
     
     @RequestMapping(value = "/calculator", method = RequestMethod.GET)
     public ModelAndView index(Model model, HttpSession httpSession) {
+
         if(httpSession.getAttribute("error") != null) {
             model.addAttribute("error", httpSession.getAttribute("error"));
             httpSession.removeAttribute("error");
@@ -39,7 +39,9 @@ public class TripController {
     }
 
     @RequestMapping(value = "/calculator", method = RequestMethod.POST)
-    public RedirectView calculatorPost(@ModelAttribute("Trip") @Valid Trip trip, BindingResult bindingResult, HttpSession httpSession, Model model) throws ParseException {
+    public RedirectView calculatorPost(@ModelAttribute("Trip") @Valid Trip trip,
+    		BindingResult bindingResult, HttpSession httpSession, 
+    		Model model) throws ParseException {
         if (bindingResult.hasErrors()) {
             httpSession.setAttribute("error", "Wypełnij pola poprawnymi wartościami!");
             return new RedirectView("/calculator");

@@ -1,8 +1,12 @@
-package com.project;
+package com.project.Misc;
 
+import com.project.Models.Trip;
 import lombok.Getter;
 import lombok.Setter;
-import org.joda.time.*;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Hours;
+import org.joda.time.Minutes;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

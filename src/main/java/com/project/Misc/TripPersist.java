@@ -1,5 +1,6 @@
-package com.project;
+package com.project.Misc;
 
+import com.project.Models.Trip;
 import lombok.Getter;
 
 import java.util.HashMap;

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Witamy</title>
+    <script src="/vendors/jquery.js"></script>
+    <script src="/vendors/js/bootstrap.min.js"></script>
+    <link href="/vendors/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="/vendors/fontawesome/fontawesome-all.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link rel="stylesheet" href="/css/home_styles.css">
+</head>
+<body>
+<div class="container">
+    <div class="row h-100">
+        <div class="col-8 my-auto">
+                <div class="text-center">
+                    <h2>Już zarejestrowany?</h2>
+                    <hr>
+                    <a th:href="@{/calculator}">
+                        <button class="btn btn-secondary btn-lg"><i class="fas fa-key"></i> Zaloguj</button>
+                    </a>
+                </div>
+        </div>
+        <div class="col-4 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Rejestracja</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="form-group">
+                            <label for="regLogin">Login</label>
+                            <input name="regLogin" id="regLogin" type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="regPass">Hasło</label>
+                            <input name="regPass" id="regPass" type="password" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="regComName">Nazwa firmy</label>
+                            <input name="regComName" id="regComName" type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="regComNip">NIP firmy</label>
+                            <input name="regComNip" id="regComNip" type="text" class="form-control">
+                        </div>
+
+                        <ul class="text-center pl-0">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Zarejestruj</button>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

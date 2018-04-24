@@ -9,7 +9,7 @@ body {
     padding-top: 1%;
     padding-bottom: 1%;
     background-size: cover;
-    background: url("images/back.jpg") fixed center;
+    background: url("../images/back.jpg") fixed center;
 }
 
 .jumbotron {
