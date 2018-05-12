@@ -1,4 +1,4 @@
-var isPaySlide = true;
+var isPaySlide = false;
 var isTransportSlide = false;
 var isSleepSlide = false;
 var isLocalSlide = false;
@@ -225,19 +225,5 @@ function validateDate() {
     } else {
         leaveDate.removeClass("is-invalid");
         arriveDate.removeClass("is-invalid");
-    }
-
-    function frontDateValid(){
-        var leaveDate = $('#leaveDate');
-        var arriveDate = $('#arriveDate');
-        var lDate = new Date(leaveDate.val());
-        var aDate = new Date(arriveDate.val());
-
-        console.log("HEJ");
-        if(lDate > aDate) {
-            return false;
-        } else {
-            return true;
-        }
     }
 }

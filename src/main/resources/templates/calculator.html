@@ -1,193 +1,233 @@
 ﻿<html lang="en" xmlns:th="">
 
 <head>
-	
-    <meta charset="UTF-8">
-    <title>Kalkulator</title>
-    <script type="text/javascript" src="/vendors/jquery.js"></script>
-    <script type="text/javascript" src="/vendors/js/bootstrap.min.js"></script>
-    <link href="/vendors/css/bootstrap.min.css" rel="stylesheet">
-    <script type="text/javascript" src="/vendors/fontawesome/fontawesome-all.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-    <link rel="stylesheet" href="/css/calculator_styles.css">
-    <script type="text/javascript" src="/vendors/tipsy/javascripts/jquery.tipsy.js"></script>
-    <link rel="stylesheet" href="/vendors/tipsy/stylesheets/tipsy.css">
 
+<meta charset="UTF-8">
+<title>Kalkulator</title>
+<script type="text/javascript" src="/vendors/jquery.js"></script>
+<script type="text/javascript" src="/vendors/js/bootstrap.min.js"></script>
+<link href="/vendors/css/bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript"
+	src="/vendors/fontawesome/fontawesome-all.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Lato"
+	rel="stylesheet">
+<link rel="stylesheet" href="/css/calculator_styles.css">
+<script type="text/javascript"
+	src="/vendors/tipsy/javascripts/jquery.tipsy.js"></script>
+<link rel="stylesheet" href="/vendors/tipsy/stylesheets/tipsy.css">
+
+<script>
+function frontDateValid(){
+	
+    var leaveDate = $('#leaveDate');
+    var arriveDate = $('#arriveDate');
+    var lDate = new Date(leaveDate.val());
+    var aDate = new Date(arriveDate.val());
+    
+    if(lDate <= aDate){
+    	return true;
+    }
+    return false;
+}</script>
 
 </head>
 
 <body>
-    <div class="container">
-        <div class="jumbotron">
-            <h1><i class="fas fa-car"></i> Kalkulator krajowej podróży służbowej</h1>
-            <hr>
-            <div class="content">
-                <form method="POST" th:action="@{/calculator}">
+	<th:block th:include="/fragments/navbar :: topbar"></th:block>
+	<div class="container h-100 vertical-center">
+		<div class="jumbotron my-auto">
+			<h1>
+				<i class="fas fa-car"></i> Kalkulator krajowej podróży służbowej
+			</h1>
+			<hr>
+			<div class="content">
+				<form method="POST" th:action="@{/calculator}" onSubmit="return frontDateValid();">
 
-                    <p id="error" th:text="${error}"/>
-                    <div class="form-group">
-                        <label for="descr">Opis</label>
-                        <textarea name="descr" id="descr" class="form-control" placeholder="krótki opis sporządzanych obliczeń"></textarea>
-                    </div>
+					<div class="form-group">
+						<div th:if="${error != null}">
+							<div class="alert alert-danger">
+								<span th:text="${error}"></span>
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+						</div>
 
-                    <!--                slajder z dietami-->
-                    <label id="togglePaysArrow">Diety <span id="payArrow"><i class="fas fa-caret-up"></i></span></label>
+						<label for="descr">Opis</label>
+						<textarea name="descr" id="descr" class="form-control"
+							placeholder="krótki opis sporządzanych obliczeń"></textarea>
+					</div>
 
-                    <div id="togglePays" class="slidersStyle">
-                        <div class="form-group">
-                            <label>Data i godzina wyjazdu</label>
-                            <div class="form-inline">
-                                <input name="leaveDate" type="date" id="leaveDate" class="form-control" value="2018-01-01">
-                                <input name="leaveTime" type="time" id="leaveTime" class="form-control" value="12:00">
-                            </div>
-                        </div>
+					<!--                slajder z dietami-->
+					<label id="togglePaysArrow">Diety <span id="payArrow"><i
+							class="fas fa-caret-down"></i></span></label>
 
-                        <div class="form-group">
-                            <label>Data i godzina przyjazdu</label>
-                            <div class="form-inline">
-                                <input name="arriveDate" type="date" id="arriveDate" class="form-control" value="2018-01-01">
-                                <input name="arriveTime" type="time" id="arriveTime" class="form-control" value="12:00">
-                            </div>
-                        </div>
+					<div id="togglePays" class="slidersStyle">
+						<div class="form-group">
+							<label>Data i godzina wyjazdu</label>
+							<div class="form-inline">
+								<input name="leaveDate" type="date" id="leaveDate"
+									class="form-control" value="2018-01-01"> <input
+									name="leaveTime" type="time" id="leaveTime"
+									class="form-control" value="12:00">
+							</div>
+						</div>
 
-                        <div class="form-group">
-                            <label for="pay">Wysokość diety za dobę podróży</label>
-                            <input name="pay" type="text" id="pay" class="form-control" placeholder="domyślnie 30 zł">
-                        </div>
+						<div class="form-group">
+							<label>Data i godzina przyjazdu</label>
+							<div class="form-inline">
+								<input name="arriveDate" type="date" id="arriveDate"
+									class="form-control" value="2018-01-01"> <input
+									name="arriveTime" type="time" id="arriveTime"
+									class="form-control" value="12:00">
+							</div>
+						</div>
 
-                        <div class="form-group">
-                            <label>Koszt zapewnionego bezpłatnego wyżywienia zmniejszający diety</label>
-                            <div class="form-inline">
-                                <input name="breakfast" type="text" id="breakfast" class="form-control" placeholder="śniadania">
-                                <input name="dinner" type="text" id="dinner" class="form-control" placeholder="obiady">
-                                <input name="supper" type="text" id="supper" class="form-control" placeholder="kolacje">
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <!--                koniec slajderka z dietami-->
+						<div class="form-group">
+							<label for="pay">Wysokość diety za dobę podróży</label> <input
+								name="pay" type="text" id="pay" class="form-control"
+								placeholder="domyślnie 30 zł">
+						</div>
 
-                    <!--               slajderek z kosztami przejazu-->
-                        <label id="toggleTransportArrow">Zwrot kosztów przejazdu
-                            <span id="transportArrow">
-                                <i class="fas fa-caret-down"></i>
-                            </span>
-                        </label>
+						<div class="form-group">
+							<label>Koszt zapewnionego bezpłatnego wyżywienia
+								zmniejszający diety</label>
+							<div class="form-inline">
+								<input name="breakfast" type="text" id="breakfast"
+									class="form-control" placeholder="śniadania"> <input
+									name="dinner" type="text" id="dinner" class="form-control"
+									placeholder="obiady"> <input name="supper" type="text"
+									id="supper" class="form-control" placeholder="kolacje">
+							</div>
+						</div>
+					</div>
+					<hr>
+					<!--                koniec slajderka z dietami-->
 
-                    <div id="toggleTransport" class="slidersStyle">
-                        <div class="form-group">
-                            <label for="transType">Rodzaj środka transportu</label>
-                            <input name="transType" type="text" id="transType" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="ticketPrice">Cena biletu za przejazd</label>
-                            <input name="ticketPrice" type="text" id="ticketPrice" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Przejazd niebędącym własnością pracodawcy</label>
-                            <ul>
-                                <li>
-                                    Samochodem osobowym
-                                    <ul>
-                                        <li>
-                                            O pojemności do 900ccm
-                                            <input name="ovCcm" type="text" id="ovCcm" class="form-control">
-                                        </li>
-                                        <li>
-                                            O pojemności pow. 900ccm
-                                            <input name="unCcm" type="text" id="unCcm" class="form-control">
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    Motocylem
-                                    <input name="motorcycle" type="text" id="motorcycle" class="form-control">
-                                </li>
-                                <li>
-                                    Motorowerem
-                                    <input name="motBicycle" type="text" id="motBicycle" class="form-control">
-                                </li>
-                            </ul>
+					<!--               slajderek z kosztami przejazu-->
+					<label id="toggleTransportArrow">Zwrot kosztów przejazdu <span
+						id="transportArrow"> <i class="fas fa-caret-down"></i>
+					</span>
+					</label>
 
-                        </div>
-                    </div>
-                    <hr>
-                    <!--                koniec slajderka z kosztami przejazdu-->
+					<div id="toggleTransport" class="slidersStyle">
+						<div class="form-group">
+							<label for="transType">Rodzaj środka transportu</label> <input
+								name="transType" type="text" id="transType" class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="ticketPrice">Cena biletu za przejazd</label> <input
+								name="ticketPrice" type="text" id="ticketPrice"
+								class="form-control">
+						</div>
+						<div class="form-group">
+							<label>Przejazd niebędącym własnością pracodawcy</label>
+							<ul>
+								<li>Samochodem osobowym
+									<ul>
+										<li>O pojemności do 900ccm <input name="ovCcm"
+											type="text" id="ovCcm" class="form-control">
+										</li>
+										<li>O pojemności pow. 900ccm <input name="unCcm"
+											type="text" id="unCcm" class="form-control">
+										</li>
+									</ul>
+								</li>
+								<li>Motocylem <input name="motorcycle" type="text"
+									id="motorcycle" class="form-control">
+								</li>
+								<li>Motorowerem <input name="motBicycle" type="text"
+									id="motBicycle" class="form-control">
+								</li>
+							</ul>
 
-                    <!--               slajderek z noclegami-->
-                        <label id="toggleSleepArrow">Koszt noclegów
-                            <span id="sleepArrow">
-                                <i class="fas fa-caret-down"></i>
-                            </span>
-                        </label>
+						</div>
+					</div>
+					<hr>
+					<!--                koniec slajderka z kosztami przejazdu-->
 
-                    <div id="toggleSleep" class="slidersStyle">
+					<!--               slajderek z noclegami-->
+					<label id="toggleSleepArrow">Koszt noclegów <span
+						id="sleepArrow"> <i class="fas fa-caret-down"></i>
+					</span>
+					</label>
 
-                        <div class="form-group">
-                            <label for="lumpSum">Liczba noclegów za które przysługuje ryczałt</label>
-                            <input name="lumpSum" type="text" id="lumpSum" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="sleepBill">Koszt noclegów stwierdzony rachunkiem</label>
-                            <input name="sleepBill" type="text" id="sleepBill" class="form-control">
-                        </div>
+					<div id="toggleSleep" class="slidersStyle">
 
-                    </div>
-                    <hr>
-                    <!--               koniec slajderka z noclegami-->
+						<div class="form-group">
+							<label for="lumpSum">Liczba noclegów za które przysługuje
+								ryczałt</label> <input name="lumpSum" type="text" id="lumpSum"
+								class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="sleepBill">Koszt noclegów stwierdzony
+								rachunkiem</label> <input name="sleepBill" type="text" id="sleepBill"
+								class="form-control">
+						</div>
 
-                    <!--               slajderek ze srodkami komunikacji miejscowej-->
-                    <label id="toggleLocalArrow">Dojazdy środkami komunikacji miejscowej<span id="localArrow"><i class="fas fa-caret-down"></i></span></label>
+					</div>
+					<hr>
+					<!--               koniec slajderka z noclegami-->
 
-                    <div id="toggleLocal" class="slidersStyle">
+					<!--               slajderek ze srodkami komunikacji miejscowej-->
+					<label id="toggleLocalArrow">Dojazdy środkami komunikacji
+						miejscowej<span id="localArrow"><i
+							class="fas fa-caret-down"></i></span>
+					</label>
 
-                        <div class="form-group">
-                            <label for="pLumpSum">Ilość dób, za które przysługuje ryczałt za dojazdy</label>
-                            <input type="text" name="pLumpSum" id="pLumpSum" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="returnPay">Kwota z tytułu zwrotu udokumentowanych kosztów dojazdów</label>
-                            <input name="returnPay" type="text" id="returnPay" class="form-control">
-                        </div>
+					<div id="toggleLocal" class="slidersStyle">
 
-                    </div>
-                    <hr>
-                    <!--               koniec slajderka ze srodkami komunikacji miejscowej-->
+						<div class="form-group">
+							<label for="pLumpSum">Ilość dób, za które przysługuje
+								ryczałt za dojazdy</label> <input type="text" name="pLumpSum"
+								id="pLumpSum" class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="returnPay">Kwota z tytułu zwrotu
+								udokumentowanych kosztów dojazdów</label> <input name="returnPay"
+								type="text" id="returnPay" class="form-control">
+						</div>
 
-                    <!--               slajderek z innych dokumentowanych wydatkow-->
+					</div>
+					<hr>
+					<!--               koniec slajderka ze srodkami komunikacji miejscowej-->
 
-                        <label id="toggleSpendsArrow">Zwrot innych udokumentowanych i uzasadnionych wydatków
-                            <span id="spendsArrow">
-                                <i class="fas fa-caret-down"></i>
-                            </span>
-                        </label>
+					<!--               slajderek z innych dokumentowanych wydatkow-->
+
+					<label id="toggleSpendsArrow">Zwrot innych udokumentowanych
+						i uzasadnionych wydatków <span id="spendsArrow"> <i
+							class="fas fa-caret-down"></i>
+					</span>
+					</label>
 
 
-                    <div id="toggleSpends" class="slidersStyle">
+					<div id="toggleSpends" class="slidersStyle">
 
-                        <button id="addSpend" type="button" class="btn btn-light btn-sm">Dodaj wydatek</button>
+						<button id="addSpend" type="button" class="btn btn-light btn-sm">Dodaj
+							wydatek</button>
 
-                    </div>
-                    <hr>
-                    <!--               koniec slajderka z innych wydatkow-->
+					</div>
+					<hr>
+					<!--               koniec slajderka z innych wydatkow-->
 
-                    <!--               poczatek zaliczki-->
-                    <div class="form-group">
-                        <label for="advance">Zaliczka</label>
-                        <input name="advance" type="text" id="advance" class="form-control">
-                    </div>
-                    <!--               koniec zaliczki-->
-                    <hr>
-                    <ul class="submitButton">
-                        <input type="submit" value="Oblicz" class="btn btn-success btn-lg">
-                    </ul>
-                </form>
-            </div>
+					<!--               poczatek zaliczki-->
+					<div class="form-group">
+						<label for="advance">Zaliczka</label> <input name="advance"
+							type="text" id="advance" class="form-control">
+					</div>
+					<!--               koniec zaliczki-->
+					<hr>
+					<ul class="submitButton">
+						<input type="submit" value="Oblicz" class="btn btn-success btn-lg">
+					</ul>
+				</form>
+			</div>
 
-        </div>
-    </div>
-    
-    <script type="text/javascript" src="/js/script.js"></script>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="/js/script.js"></script>
 </body>
 
 </html>

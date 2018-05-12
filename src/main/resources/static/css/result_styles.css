@@ -8,8 +8,9 @@ body {
     font-family: 'Lato', sans-serif;
     padding-top: 1%;
     padding-bottom: 1%;
+
+    background: #526060 url("../images/back.jpg") fixed center;
     background-size: cover;
-    background: url("../images/back.jpg") fixed center;
 }
 
 .jumbotron {
@@ -20,6 +21,7 @@ body {
     margin: 0 auto;
     margin-bottom: 0;
     padding-bottom: 1%;
+    margin-top: 70px;
 }
 
 table thead tr {

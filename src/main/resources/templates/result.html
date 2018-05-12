@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/css/result_styles.css"/>
 </head>
 <body>
+<th:block th:include="/fragments/navbar :: topbar"></th:block>
 <div class="container">
     <div id="editor"></div>
     <div class="jumbotron">
@@ -114,12 +115,10 @@
                 <td><p id="returnPay" th:text="${rtrnPay}"/></td>
             </tr>
 
-            <th:block th:each="cost, cIndex : ${costsList}">
-                <tr>
-                    <td th:text="${cost}"></td>
-                    <td th:text="${amountsList[__${cIndex .index}__]}"></td>
+                <tr th:each="cost : ${addCosts}">
+                    <td th:text="${cost.key}"></td>
+                    <td th:text="${cost.value}"></td>
                 </tr>
-            </th:block>
 
             <tr>
                 <td>Suma kosztów</td>
@@ -136,7 +135,7 @@
             </tbody>
         </table>
             <div id="gPdf">
-                <a th:href="@{result/get_report}">
+                <a th:href="@{download?(reportId=${reportId})}">
                     <button class="btn btn-lg btn-dark" id="cmd">Generuj plik PDF</button>
                 </a>
             </div>

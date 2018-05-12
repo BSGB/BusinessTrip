@@ -12,24 +12,23 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class FileSupporter {
     private static String currentDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     private static final String DEFAULT_STRING = "raport" + currentDate;
     private Document document;
-    @Getter private String fileName;
-    private HashMap<String, List> tripData;
-    private HashMap<String, String> calculatedData;
+    @Getter
+    private String fileName;
+    private Map<String, String> addCosts;
+    private Map<String, String> generalData;
     private Font font;
 
-    public FileSupporter(HashMap tripData, HashMap calculatedData) throws IOException {
+    public FileSupporter(Map addCosts, Map generalData) throws IOException {
         this.fileName = DEFAULT_STRING;
-        this.tripData = tripData;
-        this.calculatedData = calculatedData;
+        this.addCosts = addCosts;
+        this.generalData = generalData;
     }
 
     public void prepareDocument() throws FileNotFoundException, DocumentException {
@@ -41,10 +40,10 @@ public class FileSupporter {
     public void generatePdf() throws DocumentException, IOException {
         document.open();
         generateHeader();
-        generateTable("Informacje ogolne", calculatedData, "string");
-        if(!tripData.get("Costs").isEmpty()){
+        generateTable("Informacje ogolne", generalData);
+        if (!addCosts.isEmpty()) {
             document.add(Chunk.NEXTPAGE);
-            generateTable("Koszty dodatkowe", tripData, "list");
+            generateTable("Koszty dodatkowe", addCosts);
         }
         document.close();
     }
@@ -61,14 +60,14 @@ public class FileSupporter {
         document.add(Chunk.NEWLINE);
     }
 
-    private void generateTable(String title, HashMap data, String valueType) throws DocumentException, IOException {
+    private void generateTable(String title, Map data) throws DocumentException, IOException {
         Paragraph p = new Paragraph(title, font);
         p.setAlignment(Element.ALIGN_CENTER);
         document.add(p);
         document.add(Chunk.NEWLINE);
         PdfPTable table = new PdfPTable(2);
         addTableHeader(table);
-        addTableData(table, data, valueType);
+        addTableData(table, data);
         document.add(table);
     }
 
@@ -83,22 +82,10 @@ public class FileSupporter {
                 });
     }
 
-    private void addTableData(PdfPTable pdfPTable, HashMap data, String valueType) throws IOException {
-        if(valueType.equals("string")){
-            data.forEach((key, value) ->{
-                addRow(pdfPTable, (String)key, (String)value);
-            });
-        } else {
-            List<String> costs = (List)data.get("Costs");
-            List<String> amounts = (List)data.get("Amounts");
-
-            Iterator<String> costsIter = costs.iterator();
-            Iterator<String> amountsIter = amounts.iterator();
-
-            while(costsIter.hasNext() && amountsIter.hasNext()){
-                addRow(pdfPTable, costsIter.next(), amountsIter.next());
-            }
-        }
+    private void addTableData(PdfPTable pdfPTable, Map data) throws IOException {
+        data.forEach((key, value) -> {
+            addRow(pdfPTable, (String) key, (String) value);
+        });
     }
 
     private void addRow(PdfPTable pdfPTable, String key, String value) {

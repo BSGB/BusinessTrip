@@ -1,38 +1,51 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="">
 <head>
-    <meta charset="UTF-8"/>
-    <title>Logowanie</title>
-    <script src="/vendors/jquery.js"></script>
-    <script src="/vendors/js/bootstrap.min.js"></script>
-    <link href="/vendors/css/bootstrap.min.css" rel="stylesheet"/>
-    <script src="/vendors/fontawesome/fontawesome-all.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-    <link rel="stylesheet" href="/css/login_styles.css">
+<meta charset="UTF-8" />
+<title>Logowanie</title>
+<script src="/vendors/jquery.js"></script>
+<script src="/vendors/js/bootstrap.min.js"></script>
+<link href="/vendors/css/bootstrap.min.css" rel="stylesheet" />
+<script src="/vendors/fontawesome/fontawesome-all.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Lato"
+	rel="stylesheet">
+<link rel="stylesheet" href="/css/login_styles.css">
 </head>
 <body>
-<div class="container h-100">
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Logowanie</h3>
-        </div>
-        <div class="card-body">
-            <form th:action="@{/login}" method="POST">
-                <div class="form-group">
-                    <label for="">Login</label>
-                    <input type="text" name="username" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="">Hasło</label>
-                    <input type="password" name="password" class="form-control">
-                </div>
-                <ul class="text-center pl-0">
-                    <button type="submit" class="btn btn-success"><i class="fas fa-key"></i> Zaloguj</button>
-                </ul>
-            </form>
-        </div>
-    </div>
-</div>
+	<th:block th:include="/fragments/navbar :: topbar"></th:block>
+	<div class="container h-100 vertical-center">
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Logowanie</h3>
+			</div>
+			<div class="card-body">
+				<div th:if="${param.error}">
+					<div class="alert alert-danger">
+						Błędny login lub hasło!
+						<button type="button" class="close" data-dismiss="alert"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</div>
+				<form th:action="@{/login}" method="POST">
+					<div class="form-group">
+						<label for="">Login</label> <input type="text" name="username"
+							class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="">Hasło</label> <input type="password" name="password"
+							class="form-control">
+					</div>
+					<ul class="text-center pl-0">
+						<button type="submit" class="btn btn-success btn-lg">
+							<i class="fas fa-key"></i> Zaloguj
+						</button>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
 
 
 </body>

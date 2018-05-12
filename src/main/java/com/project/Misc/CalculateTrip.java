@@ -11,6 +11,8 @@ import org.joda.time.Minutes;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 @Getter@Setter
@@ -49,6 +51,7 @@ public class CalculateTrip {
     private Double pLump;
     private Double payment;
     private Double sumCosts;
+    private HashMap<String, String> addCosts = new HashMap<>();
 
     private List<Double> dbAmounts;
     private Double otherExpensesSum;
@@ -88,6 +91,7 @@ public class CalculateTrip {
         localCommunication();
         otherExpenses();
         score(dietValue, ticketPrice, trvlCost, lump, sleepBill, pLump, returnPay, otherExpensesSum);
+        generateAddCosts();
     }
 
     private void totalTripTime() throws ParseException {
@@ -169,5 +173,14 @@ public class CalculateTrip {
 
         this.sumCosts = sumCosts;
         this.payment = payment;
+    }
+    
+    private void generateAddCosts() {
+        Iterator<String> costsIter = costs.iterator();
+        Iterator<String> amountsIter = amounts.iterator();
+
+        while(costsIter.hasNext() && amountsIter.hasNext()){
+            addCosts.put(costsIter.next(), amountsIter.next());
+        }
     }
 }

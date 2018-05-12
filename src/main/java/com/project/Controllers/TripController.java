@@ -1,10 +1,16 @@
 package com.project.Controllers;
 
 import com.itextpdf.text.DocumentException;
-import com.project.Misc.CalculateTrip;
-import com.project.Misc.FileSupporter;
-import com.project.Misc.TripPersist;
+import com.project.Misc.*;
+import com.project.Models.Report;
 import com.project.Models.Trip;
+import com.project.Models.User;
+import com.project.Repositories.ReportRepository;
+import com.project.Repositories.UserRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
@@ -18,20 +24,22 @@ import javax.validation.Valid;
 import java.io.*;
 import java.net.URLConnection;
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Bartosz on 06.04.2018.
  */
 @RestController
 public class TripController {
-    
+
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    ReportRepository reportRepository;
+
     @RequestMapping(value = "/calculator", method = RequestMethod.GET)
     public ModelAndView index(Model model, HttpSession httpSession) {
 
-        if(httpSession.getAttribute("error") != null) {
+        if (httpSession.getAttribute("error") != null) {
             model.addAttribute("error", httpSession.getAttribute("error"));
             httpSession.removeAttribute("error");
         }
@@ -40,70 +48,77 @@ public class TripController {
 
     @RequestMapping(value = "/calculator", method = RequestMethod.POST)
     public RedirectView calculatorPost(@ModelAttribute("Trip") @Valid Trip trip,
-    		BindingResult bindingResult, HttpSession httpSession, 
-    		Model model) throws ParseException {
+                                       BindingResult bindingResult, HttpSession httpSession,
+                                       Model model) throws ParseException {
         if (bindingResult.hasErrors()) {
             httpSession.setAttribute("error", "Wypełnij pola poprawnymi wartościami!");
             return new RedirectView("/calculator");
         }
-        CalculateTrip calculateTrip = new CalculateTrip(trip);
-        HashMap<String, List> formLists = new HashMap<>();
-        HashMap<String, String> formValues = new HashMap<>();
-        formLists.put("costsList", trip.getCosts());
-        formLists.put("amountsList", trip.getAmounts());
-        formValues.put("dscrp", calculateTrip.getDescript());
-        formValues.put("leave", calculateTrip.getLeaveTime());
-        formValues.put("arrive", calculateTrip.getArriveTime());
-        formValues.put("total", calculateTrip.getTotalTime());
-        formValues.put("diet", calculateTrip.getDietCost().toString());
-        formValues.put("breakfast", String.valueOf(calculateTrip.getBreakfastAmount()));
-        formValues.put("dinner", String.valueOf(calculateTrip.getDinnerAmount()));
-        formValues.put("supper", String.valueOf(calculateTrip.getSupperAmount()));
-        formValues.put("freeFood", String.valueOf(calculateTrip.getFreeFoodCost()));
-        formValues.put("totalDiet", String.valueOf(calculateTrip.getDietValue()));
-        formValues.put("trnsprtType", calculateTrip.getTransType());
-        formValues.put("tcktPrice", calculateTrip.getTicketPrice().toString());
-        formValues.put("underCcm", calculateTrip.getUnCcm().toString());
-        formValues.put("overCcm", calculateTrip.getOvCcm().toString());
-        formValues.put("motoCycle", calculateTrip.getMotorcycle().toString());
-        formValues.put("motoBicycle", calculateTrip.getMotBicycle().toString());
-        formValues.put("travelCost", calculateTrip.getTrvlCost().toString());
-        formValues.put("lmpSum", String.valueOf(calculateTrip.getLumpSum()));
-        formValues.put("lmp", calculateTrip.getLump().toString());
-        formValues.put("billSleep", calculateTrip.getSleepBill().toString());
-        formValues.put("pLmpSum", String.valueOf(calculateTrip.getPLumpSum()));
-        formValues.put("pLmp", calculateTrip.getPLump().toString());
-        formValues.put("rtrnPay", calculateTrip.getReturnPay().toString());
-        formValues.put("costs", calculateTrip.getSumCosts().toString());
-        formValues.put("advnc", calculateTrip.getAdvance().toString());
-        formValues.put("paymnt", calculateTrip.getPayment().toString());
 
-        httpSession.setAttribute("Trip", formLists);
-        httpSession.setAttribute("CalculateTrip", formValues);
-        httpSession.setAttribute("TripObject", trip);
-        httpSession.setAttribute("CalculateObject", calculateTrip);
-        return new RedirectView("/calculator/result");
+        CalculateTrip calculateTrip = new CalculateTrip(trip);
+
+        //obiekt raportu
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName();
+        User user = userRepository.findByUserLogin(userName);
+        ReportDbTranslator dbTranslator = new ReportDbTranslator(calculateTrip, user);
+        Report report = dbTranslator.getReport();
+        user.getReports().add(report);
+        userRepository.save(user);
+        userRepository.flush();
+
+        int newestId = 0;
+        for (Report rp : user.getReports()) {
+
+            if (rp.getId() > newestId) {
+                newestId = rp.getId();
+            }
+        }
+        return new RedirectView("/calculator/result?reportId=" + newestId);
     }
 
-    @RequestMapping(value = "/calculator/result", method = RequestMethod.GET)
-    public ModelAndView displayResults(@RequestParam(value = "report_id", required = false) String reportId, Model model, HttpSession session, HttpServletResponse response) throws IOException, DocumentException {
-//        Map<String, ?> arguments = RequestContextUtils.getInputFlashMap(request);
-        model.addAllAttributes((Map)session.getAttribute("Trip"));
-        model.addAllAttributes((Map)session.getAttribute("CalculateTrip"));
+    @RequestMapping(value = "/calculator/result{reportId}", method = RequestMethod.GET)
+    public ModelAndView displayResults(@RequestParam(value = "reportId", required = false) int reportId, Model model, HttpSession session, HttpServletResponse response) throws IOException, DocumentException, ParseException {
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("result");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName();
+        User user = userRepository.findByUserLogin(userName);
+        DbReportProtector protector = new DbReportProtector(user, reportId);
+        ModelAndView modelAndView;
+
+        if (protector.isOwner()) {
+            Report report = protector.getReport();
+            ReportResultTranslator resultTranslator = new ReportResultTranslator(report);
+
+
+            model.addAttribute("addCosts", resultTranslator.getAdditionalValues());
+            model.addAllAttributes(resultTranslator.getFormValues());
+            model.addAttribute("reportId", reportId);
+
+            session.setAttribute("Report", report);
+
+            modelAndView = new ModelAndView();
+            modelAndView.setViewName("result");
+        } else {
+            modelAndView = new ModelAndView("redirect:../manage/reports");
+        }
+
         return modelAndView;
     }
 
-    @RequestMapping(value = "/calculator/result/{command}", method = RequestMethod.GET)
-    public void getFile(@PathVariable("command") String command, Model model, HttpSession session, HttpServletResponse response) throws IOException, DocumentException {
+    @RequestMapping(value = "/calculator/download{reportId}", method = RequestMethod.GET)
+    public void getFile(@RequestParam(value = "reportId", required = false) int reportId, Model model, HttpSession session, HttpServletResponse response) throws IOException, DocumentException {
 
-            TripPersist tripPersist = new TripPersist(
-                    (CalculateTrip)session.getAttribute("CalculateObject"),
-                    (Trip)session.getAttribute("TripObject"));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName();
+        User user = userRepository.findByUserLogin(userName);
+        DbReportProtector protector = new DbReportProtector(user, reportId);
 
-            FileSupporter fileSupporter = new FileSupporter(tripPersist.getAdditionalMap(), tripPersist.getGeneralMap());
+        if(protector.isOwner()) {
+            Report report = protector.getReport();
+            PdfTranslator pdfTranslator = new PdfTranslator(report);
+
+            FileSupporter fileSupporter = new FileSupporter(pdfTranslator.getAddMap(), pdfTranslator.getGeneralMap());
             fileSupporter.prepareDocument();
             fileSupporter.generatePdf();
 
@@ -117,5 +132,8 @@ public class TripController {
             FileCopyUtils.copy(in, os);
             in.close();
             os.close();
+        } else {
+            response.sendRedirect("../manage/reports");
+        }
     }
 }
