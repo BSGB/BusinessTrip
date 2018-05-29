@@ -51,12 +51,32 @@ div.col-sm-10 {
 	height: 100%;
 	padding-left: 0;
 	padding-right: 0;
+    background: white;
 }
 
 div.col-sm-2 {
 	padding-right: 0;
+    background: #232a30;
 }
 
 .row {
 	height: 100%;
+}
+
+li div {
+	background-color: #ffffff;
+}
+
+li div a.nav-link {
+	color: black;
+}
+
+.card {
+	height: 100%;
+}
+
+.card-body {
+	padding-left: 0;
+	padding-right: 0;
+	overflow-y: auto;
 }

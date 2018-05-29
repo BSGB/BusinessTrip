@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8" />
 <title>Logowanie</title>
@@ -12,16 +12,16 @@
 <link rel="stylesheet" href="/css/login_styles.css">
 </head>
 <body>
-	<th:block th:include="/fragments/navbar :: topbar"></th:block>
+	<th:block th:include="/fragments/topbars :: topbar"></th:block>
 	<div class="container h-100 vertical-center">
 		<div class="card">
 			<div class="card-header">
 				<h3 class="card-title">Logowanie</h3>
 			</div>
 			<div class="card-body">
-				<div th:if="${param.error}">
+				<div th:if="${param.error}" th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
 					<div class="alert alert-danger">
-						Błędny login lub hasło!
+						<span th:text="${errorMsg}"></span>
 						<button type="button" class="close" data-dismiss="alert"
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>

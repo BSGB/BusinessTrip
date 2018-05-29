@@ -1,0 +1,37 @@
+<div th:fragment="personal_sidebar">
+	<ul class="nav">
+		<div class="row">
+			<div class="col-sm-12">
+				<li class="nav-item"><a class="nav-link" href="/manage/reports"><i
+						class="far fa-file-alt"></i> Raporty</a></li>
+			</div>
+			<hr>
+			<div class="col-sm-12">
+				<li class="nav-item"><a class="nav-link" href="/manage/user"><i
+						class="far fa-user"></i> Uzytkownik</a></li>
+			</div>
+		</div>
+
+	</ul>
+</div>
+
+<div th:fragment="admin_sidebar">
+	<ul class="nav flex-column">
+		<li class="nav-item">
+			<a class="nav-link" href="/administration/reports">
+				<i class="far fa-file-alt"></i> Raporty
+			</a>
+		</li>
+		<hr>
+		<li class="nav-item">
+			<a href="#menu1" class="nav-link" data-toggle="collapse" aria-expanded="false">
+				<i class="fas fa-arrows-alt-v"></i> Uzytkownicy
+			</a>
+            <div class="collapse" id="menu1">
+            	<a href="/administration/users" class="nav-link" data-parent="#menu1"><i class="fas fa-user-edit"></i> Edytuj uzytkownikow</a>
+                <a href="/administration/add_user" class="nav-link" data-parent="#menu1"><i class="fas fa-user-plus"></i> Dodaj uzytkownika</a>
+           	</div>
+		</li>
+		<hr>
+	</ul>
+</div>

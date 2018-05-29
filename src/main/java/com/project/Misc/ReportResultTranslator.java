@@ -1,5 +1,6 @@
 package com.project.Misc;
 
+import com.project.Models.AdditionalCost;
 import com.project.Models.Report;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,6 +50,8 @@ public class ReportResultTranslator {
     }
 
     public void generateAdditionalValues(){
-
+        for(AdditionalCost additionalCost : report.getAddCosts()){
+            additionalValues.put(additionalCost.getAdcCost(), additionalCost.getAdcAmount());
+        }
     }
 }

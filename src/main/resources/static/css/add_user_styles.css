@@ -1,0 +1,17 @@
+.card {
+    height: 100%;
+}
+
+.card-body {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+}
+
+form {
+    height: 100%;
+}
+
+.message-container {
+    padding-left: 15px;
+    padding-top: 20px;
+}

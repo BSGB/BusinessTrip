@@ -1,0 +1,10 @@
+.showAndHide {
+    visibility: hidden;
+    position: absolute;
+    width: 0 !important;
+}
+
+.table thead tr:nth-of-type(1) th {
+    border-top: 0;
+    border-bottom: 0;
+}

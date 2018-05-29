@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>Brak dostępu</title>
+<script src="/vendors/jquery.js"></script>
+<script src="/vendors/js/bootstrap.min.js"></script>
+<link href="/vendors/css/bootstrap.min.css" rel="stylesheet" />
+<script src="/vendors/fontawesome/fontawesome-all.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700"
+	rel="stylesheet">
+<link rel="stylesheet" href="/css/forbidden_styles.css">
+</head>
+<body>
+	<th:block th:include="/fragments/topbars :: topbar"></th:block>
+	<div class="container h-100 vertical-center">
+		<p><span id="errorSign"><i class="far fa-times-circle"></i></span> OOOOPS! Wstęp wzbroniony ;)<p>
+	</div>
+</body>
+</html>

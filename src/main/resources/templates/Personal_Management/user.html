@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>Uzytkownik</title>
@@ -8,14 +8,14 @@
     <link href="/vendors/css/bootstrap.min.css" rel="stylesheet"/>
     <script src="/vendors/fontawesome/fontawesome-all.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-    <link rel="stylesheet" href="/css/manage_styles.css">
+    <link rel="stylesheet" href="/css/universal_administrative.css">
 </head>
 <body>
-<th:block th:include="/fragments/navbar :: topbar"></th:block>
+<th:block th:include="/fragments/topbars :: topbar"></th:block>
 <div class="container">
 	<div class="row">
 		<div class="col-sm-2">
-			<th:block th:include="/fragments/navbar :: sidebar"></th:block>
+			<th:block th:include="/fragments/sidebars :: personal_sidebar"></th:block>
 		</div>
 		<div class="col-sm-10">
 			<div id="content">

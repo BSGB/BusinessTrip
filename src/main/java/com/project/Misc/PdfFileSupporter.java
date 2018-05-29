@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class FileSupporter {
+public class PdfFileSupporter {
     private static String currentDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     private static final String DEFAULT_STRING = "raport" + currentDate;
     private Document document;
@@ -25,7 +25,7 @@ public class FileSupporter {
     private Map<String, String> generalData;
     private Font font;
 
-    public FileSupporter(Map addCosts, Map generalData) throws IOException {
+    public PdfFileSupporter(Map addCosts, Map generalData) throws IOException {
         this.fileName = DEFAULT_STRING;
         this.addCosts = addCosts;
         this.generalData = generalData;

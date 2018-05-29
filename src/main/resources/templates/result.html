@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>Wynik</title>
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/css/result_styles.css"/>
 </head>
 <body>
-<th:block th:include="/fragments/navbar :: topbar"></th:block>
+<th:block th:include="/fragments/topbars :: topbar"></th:block>
 <div class="container">
     <div id="editor"></div>
     <div class="jumbotron">
@@ -134,8 +134,13 @@
             </tr>
             </tbody>
         </table>
+        <div id="gCsv">
+            <a th:href="@{download/csv?(reportId=${reportId})}">
+                <button class="btn btn-lg btn-dark" id="cmd">Generuj plik CSV</button>
+            </a>
+        </div>
             <div id="gPdf">
-                <a th:href="@{download?(reportId=${reportId})}">
+                <a th:href="@{download/pdf?(reportId=${reportId})}">
                     <button class="btn btn-lg btn-dark" id="cmd">Generuj plik PDF</button>
                 </a>
             </div>

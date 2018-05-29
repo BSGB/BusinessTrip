@@ -31,10 +31,14 @@ import java.text.ParseException;
 @RestController
 public class TripController {
 
+    private final UserRepository userRepository;
+    private final ReportRepository reportRepository;
+
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    ReportRepository reportRepository;
+    public TripController(UserRepository userRepository, ReportRepository reportRepository) {
+        this.userRepository = userRepository;
+        this.reportRepository = reportRepository;
+    }
 
     @RequestMapping(value = "/calculator", method = RequestMethod.GET)
     public ModelAndView index(Model model, HttpSession httpSession) {
@@ -78,7 +82,8 @@ public class TripController {
     }
 
     @RequestMapping(value = "/calculator/result{reportId}", method = RequestMethod.GET)
-    public ModelAndView displayResults(@RequestParam(value = "reportId", required = false) int reportId, Model model, HttpSession session, HttpServletResponse response) throws IOException, DocumentException, ParseException {
+    public ModelAndView displayResults(@RequestParam(value = "reportId", required = false) int reportId, Model model,
+                                       HttpSession session, HttpServletResponse response) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userName = auth.getName();
@@ -86,8 +91,9 @@ public class TripController {
         DbReportProtector protector = new DbReportProtector(user, reportId);
         ModelAndView modelAndView;
 
-        if (protector.isOwner()) {
-            Report report = protector.getReport();
+
+        if (protector.isOwner() || auth.getAuthorities().iterator().next().getAuthority().equals("ADMIN")) {
+            Report report = reportRepository.findReportById(reportId);
             ReportResultTranslator resultTranslator = new ReportResultTranslator(report);
 
 
@@ -106,23 +112,23 @@ public class TripController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/calculator/download{reportId}", method = RequestMethod.GET)
-    public void getFile(@RequestParam(value = "reportId", required = false) int reportId, Model model, HttpSession session, HttpServletResponse response) throws IOException, DocumentException {
+    @RequestMapping(value = "/calculator/download/pdf{reportId}", method = RequestMethod.GET)
+    public void getPdfFile(@RequestParam(value = "reportId", required = false) int reportId, Model model, HttpSession session, HttpServletResponse response) throws IOException, DocumentException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userName = auth.getName();
         User user = userRepository.findByUserLogin(userName);
         DbReportProtector protector = new DbReportProtector(user, reportId);
 
-        if(protector.isOwner()) {
-            Report report = protector.getReport();
-            PdfTranslator pdfTranslator = new PdfTranslator(report);
+        if(protector.isOwner() || auth.getAuthorities().iterator().next().getAuthority().equals("ADMIN")) {
+            Report report = reportRepository.findReportById(reportId);
+            ReportFileTranslator reportFileTranslator = new ReportFileTranslator(report);
 
-            FileSupporter fileSupporter = new FileSupporter(pdfTranslator.getAddMap(), pdfTranslator.getGeneralMap());
-            fileSupporter.prepareDocument();
-            fileSupporter.generatePdf();
+            PdfFileSupporter pdfFileSupporter = new PdfFileSupporter(reportFileTranslator.getAddMap(), reportFileTranslator.getGeneralMap());
+            pdfFileSupporter.prepareDocument();
+            pdfFileSupporter.generatePdf();
 
-            File file = new File(fileSupporter.getFileName() + ".pdf");
+            File file = new File(pdfFileSupporter.getFileName() + ".pdf");
             InputStream in = new FileInputStream(file);
 
             response.setContentType(URLConnection.guessContentTypeFromName(file.getName()));
@@ -132,6 +138,37 @@ public class TripController {
             FileCopyUtils.copy(in, os);
             in.close();
             os.close();
+        } else {
+            response.sendRedirect("../manage/reports");
+        }
+    }
+
+    @RequestMapping(value = "/calculator/download/csv{reportId}", method = RequestMethod.GET)
+    public void getCsvFile(@RequestParam(value = "reportId", required = false) int reportId, Model model, HttpSession session, HttpServletResponse response) throws IOException, DocumentException {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName();
+        User user = userRepository.findByUserLogin(userName);
+        DbReportProtector protector = new DbReportProtector(user, reportId);
+
+        if(protector.isOwner() || auth.getAuthorities().iterator().next().getAuthority().equals("ADMIN")) {
+            Report report = reportRepository.findReportById(reportId);
+            ReportFileTranslator reportFileTranslator = new ReportFileTranslator(report);
+            CsvFileSupporter csvFileSupporter = new CsvFileSupporter(reportFileTranslator.getAddMap(), reportFileTranslator.getGeneralMap());
+
+            csvFileSupporter.generateCsv();
+
+            File file = new File(csvFileSupporter.getFileName() + ".csv");
+            InputStream in = new FileInputStream(file);
+
+            response.setContentType(URLConnection.guessContentTypeFromName(file.getName()));
+            response.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
+            response.setHeader("Content-Length", String.valueOf(file.length()));
+            OutputStream os = response.getOutputStream();
+            FileCopyUtils.copy(in, os);
+            in.close();
+            os.close();
+
         } else {
             response.sendRedirect("../manage/reports");
         }

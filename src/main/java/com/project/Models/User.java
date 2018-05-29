@@ -39,14 +39,21 @@ public class User {
     @NotNull@NotEmpty(message = "Pole hasła nie może być puste!")
     private String userPassword;
 
-    @Column(name = "user_privilege", insertable = false)
+    @Column(name = "user_privilege")
     private String userRole;
+
+    @Column(name = "account_non_locked")
+    private boolean isAccountNonLocked;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
     @OrderBy("report_id DESC")
     private Set<Report> reports = new HashSet<>();
 
     public User() {
 
+    }
+
+    public boolean index(String name, String password) {
+        return this.userLogin.equals(name) && this.userPassword.equals(password);
     }
 }

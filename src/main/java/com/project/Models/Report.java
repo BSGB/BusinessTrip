@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -94,10 +96,12 @@ public class Report {
     @Column(name = "report_payment")
     private String reportPayment;
     
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = false)
     private User user;
 	
+    @JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="report")
 	private Set<AdditionalCost> addCosts = new HashSet<>();
 

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Menedżer raportów</title>
+    <script src="/vendors/jquery.js"></script>
+    <script src="/vendors/popper/umd/popper.js"></script>
+    <script src="/vendors/js/bootstrap.min.js"></script>
+    <link href="/vendors/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="/vendors/fontawesome/fontawesome-all.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato&amp;subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" href="/css/universal_administrative.css">
+    <link rel="stylesheet" href="/css/administration_reports.css">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+<th:block th:include="/fragments/topbars :: topbar"></th:block>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-2">
+            <th:block th:include="/fragments/sidebars :: admin_sidebar"></th:block>
+        </div>
+        <div class="col-sm-10">
+            <div id="content">
+                <div class="card mx-auto">
+                    <div class="card-header">
+                        <h3 class="card-title">Raporty</h3>
+                    </div>
+                    <div class="card-body">
+                <table class="table table-hover table-striped table-light" id="reportsTable">
+                    <thead>
+                    <tr>
+                        <th colspan="10">
+                            <form class="form-inline" action="" id="filter-form">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="criteriaSelect">Filtruj</label>
+                                    </div>
+                                    <select class="custom-select" id="criteriaSelect" name="criteriaSelect">
+                                        <option value="com" selected>Według firmy</option>
+                                        <option value="date">Według przedziału</option>
+                                        <option value="comAndDate">Według firmy i przedziału</option>
+                                    </select>
+                                </div>
+
+                                <div class="input-group" id="companySelector">
+                                    <select class="custom-select" id="comNames" name="comName">
+                                        <option th:each="company : ${companies}" th:value="${company}"
+                                                th:text="${company}"></option>
+                                    </select>
+                                </div>
+
+                                <div class="input-group showAndHide" id="datePicker">
+                                    <input type="date" class="form-control" value="2018-01-01" id="lDate">
+                                    <input type="date" class="form-control" value="2018-01-01" id="aDate">
+                                </div>
+
+                                <div class="input-group">
+                                    <button type="submit" class="btn btn-dark mx-sm-3" id="filterButton">Filtruj</button>
+                                </div>
+                            </form>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th id="comNameSort">Nazwa firmy <i class="fas fa-sort"></i></th>
+                        <th>Nazwa uzytkownika</th>
+                        <th>Opis</th>
+                        <th id="lDateSort">Data wyjazdu <i class="fas fa-sort"></i></th>
+                        <th id="aDateSort">Data powrotu <i class="fas fa-sort"></i></th>
+                        <th colspan="6">Do wypłaty</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr th:each="report : ${reports}">
+                        <td class="companyName" th:text="${report.getUser().getCompanyName()}"></td>
+                        <td th:text="${report.getUser().getUserLogin()}"></td>
+                        <td th:text="${report.getReportDescr()}"></td>
+                        <td th:text="${report.getReportLeaveTime()}"></td>
+                        <td th:text="${report.getReportArriveTime()}"></td>
+                        <td th:text="${report.getReportPayment()}"></td>
+                        <td></td>
+                        <td><a th:href="@{../calculator/download/pdf?(reportId=${report.getId()})}"><i
+                                class="fas fa-file-pdf"></i> PDF</a></td>
+                        <td><a th:href="@{../calculator/download/csv?(reportId=${report.getId()})}"><i
+                                class="fas fa-file-excel"></i> CSV</a></td>
+                        <td><a th:href="@{../calculator/result?(reportId=${report.getId()})}">podgląd</a></td>
+                        <td><a th:href="@{/administration/reports/delete?(reportId=${report.getId()})}">usuń</a></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/adminReportsScripts.js"></script>
+</body>
+</html>

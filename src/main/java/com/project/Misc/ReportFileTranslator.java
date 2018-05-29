@@ -5,18 +5,15 @@ import com.project.Models.Report;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-public class PdfTranslator {
+public class ReportFileTranslator {
     private Report report;
     @Getter @Setter private Map<String, String> generalMap = new LinkedHashMap<>();
-    @Getter @Setter private Set<AdditionalCost> addSet;
+    @Getter @Setter private Set<AdditionalCost> addSet = new HashSet<>();
     @Getter @Setter private Map<String, String> addMap = new LinkedHashMap<>();
 
-    public PdfTranslator(Report report){
+    public ReportFileTranslator(Report report){
         this.report = report;
         this.addSet = report.getAddCosts();
         fillGeneralMap();
@@ -33,7 +30,7 @@ public class PdfTranslator {
         generalMap.put("Ilosc obiadow", report.getReportDinnerAmnt());
         generalMap.put("Ilosc kolacji", report.getReportSupperAmnt());
         generalMap.put("Kwota zmniejszajaca diety", String.valueOf(report.getReportFFoodCost()));
-//        generalMap.put("Loczna wysokosc diet", calculateTrip.getTotalDietCost().toString());
+//        generalMap.put("Laczna wysokosc diet", calculateTrip.getTotalDietCost().toString());
         generalMap.put("Rodzaj srodka transportu", report.getReportTransType());
         generalMap.put("Koszty przejazdu wg biletu", report.getReportTickPrice());
         generalMap.put("Przejazd samochodem do 900ccm", report.getReportUnCcm());

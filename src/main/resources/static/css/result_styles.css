@@ -31,3 +31,7 @@ table thead tr {
 #gPdf {
     text-align: right;
 }
+
+#gCsv {
+    float: left;
+}

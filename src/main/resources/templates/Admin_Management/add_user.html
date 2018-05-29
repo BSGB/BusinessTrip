@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Menedżer użytkowników</title>
+    <script src="/vendors/jquery.js"></script>
+    <script src="/vendors/popper/umd/popper.js"></script>
+    <script src="/vendors/js/bootstrap.min.js"></script>
+    <link href="/vendors/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="/vendors/fontawesome/fontawesome-all.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato&amp;subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" href="/css/universal_administrative.css">
+    <link rel="stylesheet" href="/css/add_user_styles.css">
+    <script type="text/javascript"
+            src="/vendors/tipsy/javascripts/jquery.tipsy.js"></script>
+    <link rel="stylesheet" href="/vendors/tipsy/stylesheets/tipsy.css">
+    <script>
+        function validatePassword(){
+
+            var pass = $("#regPass");
+            var passCon = $("#regPassCon");
+
+            if(pass.val() !== passCon.val()) {
+                passCon.tipsy({fallback: "Hasła nie mogą się różnić!", gravity: "n", fade: true});
+                passCon.addClass("is-invalid");
+                return false;
+            } else {
+                passCon.removeClass("is-invalid");
+                return true;
+            }
+        }
+
+    </script>
+</head>
+<body>
+<th:block th:include="/fragments/topbars :: topbar"></th:block>
+
+<div class="container">
+    <div th:if="${regSuccess != null}">
+        <div class="message-container">
+            <div class="alert alert-info">
+                <button type="button" class="close" data-dismiss="alert"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span th:text="${regSuccess}"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+            <th:block th:include="/fragments/sidebars :: admin_sidebar"></th:block>
+        </div>
+        <div class="col-sm-10">
+            <div id="content">
+                <div class="card mx-auto">
+                    <div class="card-header">
+                        <h3 class="card-title">Rejestracja</h3>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${error != null}">
+                            <div class="alert alert-danger">
+                                <button type="button" class="close" data-dismiss="alert"
+                                        aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <th:block th:each="error : ${error}">
+                                    <div>
+                                        <span th:text="${error}"></span>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                        <form method="POST" th:action="@{/administration/add_user}" onSubmit="return validatePassword();">
+                            <div class="form-group">
+                                <label for="regLogin">Login</label>
+                                <input name="userLogin" id="regLogin" type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="regPass">Hasło</label> <input name="userPassword"
+                                                                          id="regPass" type="password" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="regPassCon">Potwierdz hasło</label>
+                                <input	id="regPassCon" type="password" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="regComName">Nazwa firmy</label> <input
+                                    name="companyName" id="regComName" type="text"
+                                    class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="regComNip">NIP firmy</label> <input
+                                    name="companyNip" id="regComNip" type="text"
+                                    class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="regUserRole">Uprawnienia</label>
+                                <select class="custom-select" name="userRole" id="regUserRole" type="text">
+                                    <option value="USER" selected>USER</option>
+                                    <option value="ADMIN">ADMIN</option>
+                                </select>
+                            </div>
+
+                            <ul class="text-center pl-0">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-sign-in-alt"></i> Zarejestruj
+                                </button>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $("#regPassCon").on("keyup", function(){
+        validatePassword();
+    });
+</script>
+</html>

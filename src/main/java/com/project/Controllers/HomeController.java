@@ -27,8 +27,12 @@ import com.project.Repositories.UserRepository;
 
 @RestController
 public class HomeController {
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public HomeController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public RedirectView redirectToIndex() {
@@ -66,6 +70,8 @@ public class HomeController {
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
+        user.setUserRole("USER");
+        user.setAccountNonLocked(true);
         userRepository.save(user);
         httpSession.setAttribute("regSuccess", "Rejestracja zakończona pomyślnie!");
         return new RedirectView("/home");
